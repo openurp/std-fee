@@ -27,5 +27,7 @@ class DefaultModule extends BindModule {
 
     bind(classOf[OnlinePaySettingAction])
     bind(classOf[FeeTypeConfigAction])
+
+    bind(classOf[BillStatAction])
   }
 }
