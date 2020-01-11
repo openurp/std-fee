@@ -8,11 +8,11 @@ class BillStat {
 
 	var payedCount: Long = _
 
-	var payedValue: Long = _
+	var payedValue: Double = _
 
 	var payCount: Long = _
 
-	def this(department: Department, payedCount: Long, payedValue: Long, payCount: Long) {
+	def this(department: Department, payedCount: Long, payedValue: Double	, payCount: Long) {
 		this
 		this.department = department
 		this.payedCount = payedCount
@@ -23,6 +23,6 @@ class BillStat {
 
 	def getUnpayCount: Long = payCount - payedCount
 
-	def getPayedRate: Long = payedCount / payCount * 100
+	def getPayedRate: Double = payedCount * 1.0 / payCount
 
 }

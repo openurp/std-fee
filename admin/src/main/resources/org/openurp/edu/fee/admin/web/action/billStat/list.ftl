@@ -3,6 +3,7 @@
   <table class="gridtable">
     <thead class="gridhead">
       <tr>
+        <th>序号</th>
         <th>教学站</th>
         <th>已缴费人数</th>
         <th>已缴费金额</th>
@@ -14,15 +15,17 @@
     <tbody>[#assign sumPayedCount = 0/][#assign sumPayedValue = 0/][#assign sumPayCount = 0/]
       [#list results?sort_by(["department", "code"]) as result]
       <tr class="${(0 == result_index % 2)?string("griddata-even", "griddata-odd")}">
+        <td>${result_index+1}</td>
         <td>${result.department.name}</td>
         <td>${result.payedCount}</td>[#assign sumPayedCount = sumPayedCount + result.payedCount/]
         <td>${result.payedValue}</td>[#assign sumPayedValue = sumPayedValue + result.payedValue/]
         <td>${result.payCount}</td>[#assign sumPayCount = sumPayCount + result.payCount/]
         <td>[#if result.unpayCount gt 0]<a href="javascript:void(0)" name="unpay" data="${result.department.id}">${result.unpayCount}</a>[#else]${result.unpayCount}[/#if]</td>
-        <td>${result.payedRate?string("0.##")}%</td>
+        <td>${result.payedRate?string.percent}</td>
       </tr>
       [/#list]
       <tr class="gridhead">
+        <th></td>
         <th>合计</td>
         <th>${sumPayedCount}</th>
         <th>${sumPayedValue}</th>
@@ -32,8 +35,9 @@
       </tr>
     </tbody>
   </table>
-  [@b.form name="feeStat1Form" action="!detail1" target="_blank"]
-    <input type="hidden" name="semesterIds" value="${Parameters["semesterIds"]}"/>
+  [@b.form name="feeStat1Form" action="!detail" target="_blank"]
+    <input type="hidden" name="semesterId" value="${semesterId}"/>
+    <input type="hidden" name="feeTypeId" value="${feeTypeId}"/>
   [/@]
   <script>
     $(function() {
