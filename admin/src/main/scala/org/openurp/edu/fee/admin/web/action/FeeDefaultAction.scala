@@ -18,30 +18,40 @@
  */
 package org.openurp.edu.fee.admin.web.action
 
+import org.beangle.commons.collection.Order
 import org.beangle.data.dao.OqlBuilder
+import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.code.edu.model.EducationLevel
+import org.openurp.edu.base.model.Major
 import org.openurp.edu.base.web.ProjectSupport
-import org.openurp.edu.fee.model.{Bill, FeeType}
+import org.openurp.edu.fee.model.{FeeDefault, FeeType}
 
-class BillAction extends RestfulAction[Bill] with ProjectSupport {
+class FeeDefaultAction extends RestfulAction[FeeDefault] with ProjectSupport {
 
-  override def indexSetting(): Unit = {
-    put("feeTypes", getCodes(classOf[FeeType]))
-    put("levels", getCodes(classOf[EducationLevel]))
-    put("currentSemester", getCurrentSemester)
-    super.indexSetting()
-  }
+	override def indexSetting(): Unit = {
+		put("levels", getCodes(classOf[EducationLevel]))
+		put("departments", getDeparts)
+		put("majors", findInProject(classOf[Major]))
+		super.indexSetting()
+	}
 
-  override protected def getQueryBuilder: OqlBuilder[Bill] = {
-    val query = super.getQueryBuilder
-    getBoolean("paid") foreach { payed =>
-      if (payed) {
-        query.where("bill.payed > 0")
-      } else {
-        query.where("bill.payed <= 0")
-      }
-    }
-    query
-  }
+	override def editSetting(entity: FeeDefault): Unit = {
+		put("feeTypes", getCodes(classOf[FeeType]))
+		put("levels", getCodes(classOf[EducationLevel]))
+		put("departments", getDeparts)
+		put("majors", findInProject(classOf[Major]))
+		super.editSetting(entity)
+	}
+
+	/**
+	 * 打印
+	 *
+	 * @return
+	 */
+	def printReview: View = {
+		put("feeDefaults", entityDao.search(OqlBuilder.from(classOf[FeeDefault], "feeDefault")))
+		forward()
+	}
+
 }

@@ -16,20 +16,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.edu.fee.admin.web.action
+package org.openurp.edu.fee.model
 
-import org.beangle.cdi.bind.BindModule
+import org.beangle.data.model.IntId
+import org.openurp.base.model.Department
+import org.openurp.code.edu.model.EducationLevel
+import org.openurp.edu.base.model.Major
 
-class DefaultModule extends BindModule {
-	override protected def binding(): Unit = {
-		bind(classOf[BillAction],classOf[BillSearchAction])
-		bind(classOf[OrderAction])
+/**
+ * 收费缺省值
+ */
+class FeeDefault extends IntId {
 
-		bind(classOf[OnlinePaySettingAction])
-		bind(classOf[FeeTypeConfigAction])
+	/** 起始年级 */
+	var fromGrade: String = _
 
-		bind(classOf[BillStatAction])
+	/** 截止年级 */
+	var toGrade: String = _
 
-		bind(classOf[FeeDefaultAction], classOf[CreditFeeDefaultAction])
-	}
+	/** 学历层次（原：学生类别） */
+	var level: EducationLevel = _
+
+	/** 系 */
+	var department: Option[Department] = None
+
+	/** 所属的专业 */
+	var major: Option[Major] = None
+
+	/** 收费类型 */
+	var `type`: FeeType = _
+
+	/** 对应的值 */
+	var value: Integer = _
+
+	/** remark */
+	var remark: Option[String] = None
+
 }

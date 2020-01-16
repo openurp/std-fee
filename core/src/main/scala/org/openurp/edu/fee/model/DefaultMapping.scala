@@ -22,20 +22,24 @@ import org.beangle.data.orm.MappingModule
 
 class DefaultMapping extends MappingModule {
 
-  def binding(): Unit = {
-    defaultIdGenerator("auto_increment")
+	def binding(): Unit = {
+		defaultIdGenerator("auto_increment")
 
-    bind[FeeType]
+		bind[FeeDefault]
 
-    bind[Bill] declare { e =>
-      index("idx_bill_std", false, e.std)
-    }
+		bind[CreditFeeDefault]
 
-    bind[Order] declare { e =>
-      e.code is(length(50), unique)
-      e.payUrl is length(500)
-      index("idx_order_bill_id", true, e.bill)
-    }
-  }
+		bind[FeeType]
+
+		bind[Bill] declare { e =>
+			index("idx_bill_std", false, e.std)
+		}
+
+		bind[Order] declare { e =>
+			e.code is(length(50), unique)
+			e.payUrl is length(500)
+			index("idx_order_bill_id", true, e.bill)
+		}
+	}
 
 }

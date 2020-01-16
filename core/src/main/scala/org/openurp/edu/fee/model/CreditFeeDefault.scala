@@ -16,20 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.edu.fee.admin.web.action
+package org.openurp.edu.fee.model
 
-import org.beangle.cdi.bind.BindModule
+import org.beangle.data.model.IntId
+import org.openurp.code.edu.model.EducationLevel
+import org.openurp.edu.base.code.model.CourseType
 
-class DefaultModule extends BindModule {
-	override protected def binding(): Unit = {
-		bind(classOf[BillAction],classOf[BillSearchAction])
-		bind(classOf[OrderAction])
+/**
+ * 学分收费标准
+ */
+class CreditFeeDefault extends IntId {
 
-		bind(classOf[OnlinePaySettingAction])
-		bind(classOf[FeeTypeConfigAction])
+	/** 学历层次（原：学生类别） */
+	var level: EducationLevel = _
 
-		bind(classOf[BillStatAction])
+	/** 课程类别 */
+	var courseType: CourseType = _
 
-		bind(classOf[FeeDefaultAction], classOf[CreditFeeDefaultAction])
-	}
+	/** 收费金额 */
+	var value: Option[Float] = None
+
 }

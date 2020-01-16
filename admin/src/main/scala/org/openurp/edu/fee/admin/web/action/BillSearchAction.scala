@@ -18,18 +18,30 @@
  */
 package org.openurp.edu.fee.admin.web.action
 
-import org.beangle.cdi.bind.BindModule
+import org.beangle.data.dao.OqlBuilder
+import org.beangle.webmvc.entity.action.RestfulAction
+import org.openurp.code.edu.model.EducationLevel
+import org.openurp.edu.base.web.ProjectSupport
+import org.openurp.edu.fee.model.{Bill, FeeType}
 
-class DefaultModule extends BindModule {
-	override protected def binding(): Unit = {
-		bind(classOf[BillAction],classOf[BillSearchAction])
-		bind(classOf[OrderAction])
+class BillSearchAction extends RestfulAction[Bill] with ProjectSupport {
 
-		bind(classOf[OnlinePaySettingAction])
-		bind(classOf[FeeTypeConfigAction])
-
-		bind(classOf[BillStatAction])
-
-		bind(classOf[FeeDefaultAction], classOf[CreditFeeDefaultAction])
+	override def indexSetting(): Unit = {
+		put("feeTypes", getCodes(classOf[FeeType]))
+		put("levels", getCodes(classOf[EducationLevel]))
+		put("currentSemester", getCurrentSemester)
 	}
+
+	override protected def getQueryBuilder: OqlBuilder[Bill] = {
+		val query = super.getQueryBuilder
+		getBoolean("paid") foreach { payed =>
+			if (payed) {
+				query.where("bill.payed > 0")
+			} else {
+				query.where("bill.payed <= 0")
+			}
+		}
+		query
+	}
+
 }
