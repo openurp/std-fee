@@ -28,7 +28,6 @@
         });
 
         return isOk;
-      alert(isOk)
       }, "该记录已存在！！！");
 
     [/@]
