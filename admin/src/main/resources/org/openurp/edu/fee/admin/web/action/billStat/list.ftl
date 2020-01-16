@@ -3,7 +3,7 @@
   <table class="gridtable">
     <thead class="gridhead">
       <tr>
-        <th>序号</th>
+        <th width="5%">序号</th>
         <th>教学站</th>
         <th>已缴费人数</th>
         <th>已缴费金额</th>
@@ -21,7 +21,7 @@
         <td>${result.payedValue}</td>[#assign sumPayedValue = sumPayedValue + result.payedValue/]
         <td>${result.payCount}</td>[#assign sumPayCount = sumPayCount + result.payCount/]
         <td>[#if result.unpayCount gt 0]<a href="javascript:void(0)" name="unpay" data="${result.department.id}">${result.unpayCount}</a>[#else]${result.unpayCount}[/#if]</td>
-        <td>${result.payedRate?string.percent}</td>
+        <td>${(result.payedRate*100.0)?string("0.##")}%</td>
       </tr>
       [/#list]
       <tr class="gridhead">
