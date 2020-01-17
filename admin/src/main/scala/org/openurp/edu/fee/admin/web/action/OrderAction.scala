@@ -18,12 +18,16 @@
  */
 package org.openurp.edu.fee.admin.web.action
 
+import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.code.edu.model.EducationLevel
 import org.openurp.edu.base.web.ProjectSupport
 import org.openurp.edu.fee.model.{FeeType, Order}
+import org.openurp.edu.fee.pay.PayService
 
 class OrderAction extends RestfulAction[Order] with ProjectSupport {
+
+  var payService: PayService = _
 
   override protected def indexSetting(): Unit = {
     put("feeTypes", getCodes(classOf[FeeType]))
@@ -32,5 +36,16 @@ class OrderAction extends RestfulAction[Order] with ProjectSupport {
 
   override def simpleEntityName: String = {
     "o"
+  }
+
+  def check(): View = {
+    val ids = longIds("o")
+    val orders = entityDao.find(classOf[Order], ids)
+    orders foreach { order =>
+      if (!order.paid) {
+        payService.refreshBill(order.bill)
+      }
+    }
+    redirect("search", "info.save.success")
   }
 }

@@ -1,0 +1,18 @@
+[#ftl]
+[@b.head/]
+[@b.toolbar title="打印收费配置"]
+	bar.addPrint();
+	bar.addClose();
+[/@]
+[@b.grid items=tuitionConfigs var="tuitionConfig"]
+  [@b.row]
+    [@b.col title="序号"  width="10%"]${tuitionConfig_index+1}[/@]
+    [@b.col title="学历层次" property="level.name" width="10%"/]
+    [@b.col title="院系所" property="department.name" width="20%"]${(tuitionConfig.department.name)!"不限"}[/@]
+    [@b.col title="专业" property="major.name" width="30%"]${(tuitionConfig.major.name)!"不限"}[/@]
+    [@b.col title="收费类别" property="feeType.name" width="10%"/]
+    [@b.col title="总额" property="amount" width="10%"]${(tuitionConfig.amount/100.0)?string('#.00')}[/@]
+    [@b.col title="备注" property="remark" width="10%"/]
+  [/@]
+[/@]
+[@b.foot/]

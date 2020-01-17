@@ -26,7 +26,7 @@ import org.openurp.edu.base.model.Major
 /**
  * 收费缺省值
  */
-class FeeDefault extends IntId {
+class TuitionConfig extends IntId {
 
 	/** 起始年级 */
 	var fromGrade: String = _
@@ -34,7 +34,7 @@ class FeeDefault extends IntId {
 	/** 截止年级 */
 	var toGrade: String = _
 
-	/** 学历层次（原：学生类别） */
+	/** 学历层次 */
 	var level: EducationLevel = _
 
 	/** 系 */
@@ -44,10 +44,10 @@ class FeeDefault extends IntId {
 	var major: Option[Major] = None
 
 	/** 收费类型 */
-	var `type`: FeeType = _
+	var feeType: FeeType = _
 
 	/** 对应的值 */
-	var value: Integer = _
+	var amount: Integer = _
 
 	/** remark */
 	var remark: Option[String] = None

@@ -19,17 +19,19 @@
 package org.openurp.edu.fee.admin.web.action
 
 import org.beangle.cdi.bind.BindModule
+import org.openurp.edu.fee.pay.impl.SufePayServiceImpl
 
 class DefaultModule extends BindModule {
-	override protected def binding(): Unit = {
-		bind(classOf[BillAction],classOf[BillSearchAction])
-		bind(classOf[OrderAction])
+  override protected def binding(): Unit = {
+    bind(classOf[BillAction], classOf[BillSearchAction])
+    bind(classOf[OrderAction])
 
-		bind(classOf[OnlinePaySettingAction])
-		bind(classOf[FeeTypeConfigAction])
+    bind(classOf[OnlinePaySettingAction])
+    bind(classOf[FeeTypeConfigAction])
 
-		bind(classOf[BillStatAction])
+    bind(classOf[BillStatAction])
 
-		bind(classOf[FeeDefaultAction], classOf[CreditFeeDefaultAction])
-	}
+    bind(classOf[TuitionConfigAction])
+    bind(classOf[SufePayServiceImpl])
+  }
 }

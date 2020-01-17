@@ -62,8 +62,13 @@ class SufePayServiceImpl extends PayService with Logging with Initializing {
       val now = Instant.now
       val remindSeconds = Duration.between(now, order.expiredAt).getSeconds
       if (remindSeconds < 2 * 60) { //less than 2 minutes
-        entityDao.remove(order)
-        createOrder(bill, params)
+        refreshBillByOrder(bill, order)
+        if (bill.payed <= 0) {
+          entityDao.remove(order)
+          createOrder(bill, params)
+        } else {
+          order
+        }
       } else {
         order
       }
@@ -77,19 +82,23 @@ class SufePayServiceImpl extends PayService with Logging with Initializing {
     query.where("pr.bill=:bill", bill)
     val orders = entityDao.search(query)
     orders foreach { order =>
-      if (!order.paid) {
-        val o = checkOrder(products(bill.feeType.id), order.code)
-        order.status = o.status
-        order.paid = o.paid
-        order.channel = o.channel
-        order.payAt = o.payAt
-      }
       refreshBillByOrder(bill, order)
     }
     orders.headOption.orNull
   }
 
   private def refreshBillByOrder(bill: Bill, order: Order): Unit = {
+    if (!order.paid) {
+      val o = checkOrder(products(bill.feeType.id), order.code)
+      order.status = o.status
+      order.paid = o.paid
+      order.channel = o.channel
+      order.payAt = o.payAt
+    }
+    updateBillByOrder(bill, order)
+  }
+
+  private def updateBillByOrder(bill: Bill, order: Order): Unit = {
     if (bill.payed <= 0) {
       if (order.paid) {
         bill.payed = bill.amount

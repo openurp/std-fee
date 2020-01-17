@@ -3,6 +3,8 @@
   [@b.grid items=oes var="o"]
     [@b.gridbar]
       bar.addItem("${b.text("action.info")}", action.info());
+      bar.addItem("核对",action.multi("check","确定核对订单?"));
+      bar.addItem("导出",action.exportData("code:订单号,std.user.code:学号,std.user.name:姓名,bill.feeType.name:收费类型,createdAt:创建时间,payAt:支付时间,channel:支付渠道,amount:应缴",null,'fileName=订单信息'));
     [/@]
     [@b.row]
       [@b.boxcol/]
