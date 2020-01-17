@@ -31,7 +31,7 @@ class DefaultModule extends BindModule {
 
     bind(classOf[BillStatAction])
 
-    bind(classOf[TuitionConfigAction], classOf[CreditFeeDefaultAction])
+    bind(classOf[TuitionConfigAction])
     bind(classOf[SufePayServiceImpl])
   }
 }
