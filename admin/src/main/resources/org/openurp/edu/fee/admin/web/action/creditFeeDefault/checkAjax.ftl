@@ -1,3 +1,0 @@
-{
-  "isOk": ${isOk?string}
-}

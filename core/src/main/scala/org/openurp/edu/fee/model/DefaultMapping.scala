@@ -25,9 +25,7 @@ class DefaultMapping extends MappingModule {
 	def binding(): Unit = {
 		defaultIdGenerator("auto_increment")
 
-		bind[FeeDefault]
-
-		bind[CreditFeeDefault]
+		bind[TuitionConfig]
 
 		bind[FeeType]
 
