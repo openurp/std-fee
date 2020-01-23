@@ -47,7 +47,7 @@ class TuitionConfig extends IntId {
 	var feeType: FeeType = _
 
 	/** 对应的值 */
-	var amount: Integer = _
+	var amount: Int = _
 
 	/** remark */
 	var remark: Option[String] = None

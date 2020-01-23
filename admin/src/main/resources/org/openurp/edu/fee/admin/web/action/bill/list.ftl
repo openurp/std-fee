@@ -16,7 +16,7 @@
       [@b.col title="收费类型" property="feeType.name"  width="8%"/]
       [@b.col title="应缴" property="amount"  width="7%"]<span[#if bill.amount?default(0) lt 1] style="color: red"[/#if]>${((bill.amount/100.0)?string("0.00#"))!}</span>[/@]
       [@b.col title="实缴" property="payed"  width="7%"]<span[#if bill.payed?default(0) lt 1] style="color: red"[/#if]>${((bill.payed/100.0)?string("0.00#"))!}</span>[/@]
-      [@b.col title="实缴时间" property="payAt"  width="12%"]${(bill.payAt?string("yy-MM-dd HH:mm"))!}[/@]
+      [@b.col title="实缴时间" property="payAt"  width="12%"]${(bill.payAt?string("yyyy-MM-dd HH:mm"))!}[/@]
     [/@]
   [/@]
 [@b.foot/]

@@ -74,12 +74,12 @@ class BillStatAction extends RestfulAction[Bill] with ProjectSupport {
 		builder.where("bill.payed is null or bill.payed = 0")
 		var orderBy = get("orderBy").orNull
 		get("orderBy") match {
-			case Some(value) => orderBy += ",bill.id"
+			case Some(value) => orderBy = orderBy + ",bill.id"
 			case None => orderBy = "bill.id"
 		}
 		builder.orderBy(Order.parse(orderBy))
 		put("bills", entityDao.search(builder))
-		put("semester",entityDao.get(classOf[Semester],intId("semester")))
+		put("semester", entityDao.get(classOf[Semester], intId("semester")))
 		forward()
 	}
 

@@ -5,9 +5,8 @@
       bar.addItem("初始化", function() {
         var studentIds = bg.input.getCheckBoxValues("student.id");
         if (!studentIds || !studentIds.trim().length) {
-          if (!confirm("要初始化生成当前列表中所有已找到收费标准学生于当前学期的应缴记录吗？") || !toCheck()) {
-            return false;
-          }
+          alert("请选择要初始化的学生名单");
+          return;
         } else {
           if (!confirm("要初始化生成当前已找到收费标准的所选学生于当前学期的应缴记录吗？") || !toCheck(studentIds)) {
             return false;
@@ -41,14 +40,14 @@
     [/@]
     [@b.row]
       [@b.boxcol/]
-      [@b.col title="学号" property="code"/]
-      [@b.col title="姓名" property="name"/]
-      [@b.col title="学制" property="duration"/]
-      [@b.col title="年级" property="state.grade"/]
-      [@b.col title="培养层次" property="level.name"/]
-      [@b.col title="common.college" sortable="false"][#assign currentStudentState = currentStateMap.get(student)/]${(currentStudentState.department.name)}[/@]
-      [@b.col title="专业" sortable="false"]${currentStudentState.major.name}[/@]
-      [@b.col title="应缴" sortable="false"]${(stateFeeDefaultMap.get(currentStudentState).value / student.duration?ceiling)!"<span style=\"color: red\">收费标准未找到</span>"}[/@]
+      [@b.col title="学号" property="user.code" width="10%"/]
+      [@b.col title="姓名" property="user.name" width="10%"/]
+      [@b.col title="学制" property="duration" width="8%"/]
+      [@b.col title="年级" property="state.grade" width="8%"/]
+      [@b.col title="培养层次" property="level.name" width="10%"/]
+      [@b.col title="院系" sortable="false" width="17%"][#assign currentStudentState = currentStateMap.get(student)/]${(currentStudentState.department.name)}[/@]
+      [@b.col title="专业" sortable="false" width="17%"]${currentStudentState.major.name}[/@]
+      [@b.col title="应缴" sortable="false" width="15%"]${(stateTuitionConfigMap.get(currentStudentState).amount / student.duration?ceiling)!"<span style=\"color: red\">收费标准未找到</span>"}[/@]
     [/@]
   [/@]
 [@b.foot/]

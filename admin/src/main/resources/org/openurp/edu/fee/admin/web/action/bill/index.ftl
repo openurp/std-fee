@@ -1,16 +1,14 @@
 [#ftl]
 [@b.head/]
   [@b.toolbar title="收费信息维护"]
-    [#--
     bar.addItem("初始化收费(名单)", function() {
       var form = document.billSearchForm;
       if (!form["bill.semester.id"].value.trim().length) {
         alert("请选择所要初始化的学年学期，谢谢！");
         return false;
       }
-      bg.form.submit(form, "${b.url("!index")}", "main");
+      bg.form.submit(form, "${b.url("!initIndex")}", "_blank");
     }, "action-new");
-    --]
   [/@]
   <table class="indexpanel">
     <tr>

@@ -19,6 +19,7 @@
 package org.openurp.edu.fee.admin.web.action
 
 import org.beangle.cdi.bind.BindModule
+import org.openurp.edu.fee.admin.utils.StudentUtils
 import org.openurp.edu.fee.pay.impl.SufePayServiceImpl
 
 class DefaultModule extends BindModule {
@@ -33,5 +34,7 @@ class DefaultModule extends BindModule {
 
     bind(classOf[TuitionConfigAction])
     bind(classOf[SufePayServiceImpl])
+
+    bind( classOf[StudentUtils] )
   }
 }
