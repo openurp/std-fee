@@ -44,7 +44,7 @@ class SufePayServiceImpl extends PayService with Logging with Initializing {
   var products: Map[Int, Product] = Map.empty
 
   //one hour
-  var orderIdleSeconds = 60 * 60
+  var orderIdleSeconds = 30 * 60
 
   override def init(): Unit = {
     val configs = entityDao.getAll(classOf[FeeTypeConfig])
@@ -213,7 +213,12 @@ class SufePayServiceImpl extends PayService with Logging with Initializing {
     val queryString = s"productId=${product.id}&timestamp=${timestamp}&secret=${product.secret}"
     val sign = Digests.md5Hex(Digests.md5Hex(queryString)).toUpperCase()
     val url = s"https://mp.sufe.edu.cn/jfadmin/admin/open/pay/order/get?orderNo=${orderNo}&" + queryString + s"&sign=${sign}"
-    HttpUtils.getText(url).map(parseOrderStatus).orNull
+    val res =HttpUtils.getText(url)
+    if(res.status ==200){
+      parseOrderStatus(res.getText)
+    }else{
+      null
+    }
   }
 
   protected[impl] def parseOrderStatus(res: String): Order = {

@@ -22,6 +22,6 @@
        new QRCode(document.getElementById("qrcode"), "${o.payUrl}");
    };
    var qrcode_url='${b.static_url("qrcodejs","qrcode.js")}'
-   bg.require(qrcode_url.substring(4),generateQr,"http")
+   bg.require(qrcode_url,generateQr)
   </script>
 [@b.foot/]
