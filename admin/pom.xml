@@ -22,11 +22,6 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.openurp.edu.fee</groupId>
-      <artifactId>openurp-edu-fee-pay</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
       <groupId>org.openurp.edu.base</groupId>
       <artifactId>openurp-edu-base-web</artifactId>
       <version>${openurp.edu.base.version}</version>

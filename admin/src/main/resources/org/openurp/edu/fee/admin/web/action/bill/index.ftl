@@ -16,7 +16,8 @@
         [@b.form title="ui.searchForm" name="billSearchForm" action="!search" target="bills" theme="search"]
           <tr>
             <td class="search-item">
-              [@edu_base.semester name="bill.semester.id" label="学年学期"  value=currentSemester required="true"/]
+              [@edu_base.semester name="bill.semester.id" label="学年学期"  value=currentSemester required="false"/]
+              <input type="hidden" name="orderBy" value="bill.payAt desc"/>
             <td>
           </tr>
           [@b.textfields names="bill.std.user.code;学号,bill.std.user.name;姓名"/]
@@ -31,7 +32,7 @@
   <script>
     $(function() {
       $(document).ready(function() {
-        bg.form.submit(document.billSearchForm, "${b.url("!search?orderBy=bill.std.user.code")}", "bills");
+        bg.form.submit(document.billSearchForm, "${b.url("!search")}", "bills");
       });
     });
   </script>

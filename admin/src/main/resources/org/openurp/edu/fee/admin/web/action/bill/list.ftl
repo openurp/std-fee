@@ -4,6 +4,11 @@
     [@b.gridbar]
       bar.addItem("${b.text("action.modify")}", action.edit());
       bar.addItem("${b.text("action.info")}", action.info());
+      bar.addItem("${b.text("action.export")}",action.exportData(
+      "std.user.code:学号,std.user.name:姓名,std.state.grade:年级,std.level.name:学历层次," +
+      "std.person.code:证件号码,std.user.mobile:手机号,"+
+      "std.state.department.name:院系,std.state.major.name:专业,std.state.squad.name:班级," +
+      "semester.code:学年学期,feeType.name:收费类型,amount:应缴,payed:实缴,payAt:缴费时间",null,'fileName=缴费信息'));
     [/@]
     [@b.row]
       [@b.boxcol/]

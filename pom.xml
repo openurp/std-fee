@@ -20,7 +20,6 @@
 
   <modules>
     <module>core</module>
-    <module>pay</module>
     <module>admin</module>
     <module>adminapp</module>
     <module>student</module>
