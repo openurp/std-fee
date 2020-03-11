@@ -22,10 +22,8 @@ import java.time.Instant
 
 import org.beangle.commons.collection.{Collections, Order}
 import org.beangle.commons.lang.Strings
-import org.beangle.data.dao.{LimitQuery, OqlBuilder, QueryPage}
-import org.beangle.data.transfer.exporter.ExportSetting
+import org.beangle.data.dao.OqlBuilder
 import org.beangle.security.Securities
-import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.code.edu.model.EducationLevel
@@ -56,6 +54,9 @@ class BillAction extends RestfulAction[Bill] with ProjectSupport {
       } else {
         query.where("bill.payed <= 0")
       }
+    }
+    getBoolean("student_inschool") foreach { inschool =>
+      query.where("bill.std.state.inschool=:inschool", inschool)
     }
     query
   }
@@ -285,11 +286,5 @@ class BillAction extends RestfulAction[Bill] with ProjectSupport {
     bill.std.id = longId("bill.std")
     bill.updatedBy = Securities.user
     super.saveAndRedirect(bill)
-  }
-
-  @ignore
-  override def configExport(setting: ExportSetting): Unit = {
-    val query = getQueryBuilder.limit(1, 500)
-    setting.context.put("items", new QueryPage(query.build().asInstanceOf[LimitQuery[Bill]], entityDao))
   }
 }

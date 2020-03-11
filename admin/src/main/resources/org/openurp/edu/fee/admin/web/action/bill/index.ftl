@@ -24,6 +24,7 @@
           [@b.select label="学历层次" items=levels?sort_by("code") empty="..."  name="bill.std.level.id"/]
           [@b.select label="收费类型" items=feeTypes?sort_by("code") empty="..."  name="bill.feeType.id"/]
           [@b.select label="缴费状态" items={"1":"已缴","0":"未缴"} empty="..."  name="paid"/]
+          [@b.select label="学籍状态" items={"1":"在校","0":"不在校"} empty="..."  name="student_inschool"/]
         [/@]
       </td>
       <td class="index_content">[@b.div id="bills"/]</td>

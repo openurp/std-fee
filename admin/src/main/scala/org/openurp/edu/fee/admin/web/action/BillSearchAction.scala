@@ -18,9 +18,7 @@
  */
 package org.openurp.edu.fee.admin.web.action
 
-import org.beangle.data.dao.{LimitQuery, OqlBuilder, QueryPage}
-import org.beangle.data.transfer.exporter.ExportSetting
-import org.beangle.webmvc.api.annotation.ignore
+import org.beangle.data.dao.OqlBuilder
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.code.edu.model.EducationLevel
 import org.openurp.edu.base.web.ProjectSupport
@@ -43,12 +41,9 @@ class BillSearchAction extends RestfulAction[Bill] with ProjectSupport {
         query.where("bill.payed <= 0")
       }
     }
+    getBoolean("student_inschool") foreach { inschool =>
+      query.where("bill.std.state.inschool=:inschool",inschool)
+    }
     query
-  }
-
-  @ignore
-  override def configExport(setting: ExportSetting): Unit = {
-    val query = getQueryBuilder.limit(1, 500)
-    setting.context.put("items", new QueryPage(query.build().asInstanceOf[LimitQuery[Bill]], entityDao))
   }
 }
