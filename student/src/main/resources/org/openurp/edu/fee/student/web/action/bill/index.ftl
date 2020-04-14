@@ -1,7 +1,7 @@
 [@b.head/]
 [#function suitable bill]
     [#list settings as s]
-      [#if s.suitable(bill.feeType)][#return true/][/#if]
+      [#if s.semester == bill.semester && s.suitable(bill.feeType)][#return true/][/#if]
     [/#list]
     [#return false/]
 [/#function]
