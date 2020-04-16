@@ -7,7 +7,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openurp.edu.fee</groupId>
   <artifactId>openurp-edu-fee-parent</artifactId>
-  <version>0.0.2</version>
+  <version>0.0.3</version>
   <packaging>pom</packaging>
   <name>OpenURP Edu Fee Parent</name>
 
@@ -15,7 +15,7 @@
     <bundle.symbolicName>org.openurp.edu.grade</bundle.symbolicName>
     <bundle.namespace>org.openurp.edu.grade</bundle.namespace>
     <openurp.api.version>0.13.1</openurp.api.version>
-    <openurp.edu.base.version>0.0.36</openurp.edu.base.version>
+    <openurp.edu.base.version>0.0.37</openurp.edu.base.version>
   </properties>
 
   <modules>

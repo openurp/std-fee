@@ -42,6 +42,7 @@ class BillAction extends RestfulAction[Bill] with ProjectSupport {
   override def indexSetting(): Unit = {
     put("feeTypes", getCodes(classOf[FeeType]))
     put("levels", getCodes(classOf[EducationLevel]))
+    put("project",getProject)
     put("currentSemester", getCurrentSemester)
     super.indexSetting()
   }

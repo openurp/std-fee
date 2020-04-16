@@ -30,6 +30,7 @@ class BillSearchAction extends RestfulAction[Bill] with ProjectSupport {
     put("feeTypes", getCodes(classOf[FeeType]))
     put("levels", getCodes(classOf[EducationLevel]))
     put("currentSemester", getCurrentSemester)
+    put("project",getProject)
   }
 
   override protected def getQueryBuilder: OqlBuilder[Bill] = {
