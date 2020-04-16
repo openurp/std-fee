@@ -29,6 +29,7 @@ class OnlinePaySettingAction extends RestfulAction[OnlinePaySetting] with Projec
   override protected def editSetting(entity: OnlinePaySetting): Unit = {
     val feeTypes = getCodes(classOf[FeeType]).toBuffer
     put("feeTypes", feeTypes.subtractAll(entity.feeTypes))
+    put("project",getProject)
   }
 
   override protected def saveAndRedirect(entity: OnlinePaySetting): View = {
