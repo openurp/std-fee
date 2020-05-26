@@ -42,7 +42,7 @@ class BillAction extends EntityAction[Bill] with ProjectSupport {
     put("std", std)
 
     val settingQuery = OqlBuilder.from(classOf[OnlinePaySetting], "s")
-    settingQuery.where("s.endOn > :now", LocalDate.now())
+    settingQuery.where("s.endOn >= :now", LocalDate.now())
     val settings = entityDao.search(settingQuery)
     put("settings", settings)
     forward()

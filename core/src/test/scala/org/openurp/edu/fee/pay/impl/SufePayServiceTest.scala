@@ -100,7 +100,9 @@ class SufePayServiceTest extends AnyFunSpec with Matchers {
     it("checkOrder") {
       val order = new SufePayServiceImpl().checkOrder(product, "202001070914267580015046")
       val formater = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault())
-      println(order.channel, order.status, order.paid, formater.format(order.payAt.get))
+      if(null!=order){
+        println(order.channel, order.status, order.paid, formater.format(order.payAt.get))
+      }
     }
   }
 }

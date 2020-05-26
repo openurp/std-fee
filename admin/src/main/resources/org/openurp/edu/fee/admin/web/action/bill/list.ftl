@@ -5,6 +5,7 @@
       bar.addItem("${b.text("action.modify")}", action.edit());
       bar.addItem("${b.text("action.info")}", action.info());
       bar.addItem("${b.text("action.delete")}",action.remove());
+      bar.addItem("导入",action.method('importForm'));
       bar.addItem("${b.text("action.export")}",action.exportData(
       "std.user.code:学号,std.user.name:姓名,std.state.grade:年级,std.level.name:学历层次," +
       "std.person.code:证件号码,std.user.mobile:手机号,"+
