@@ -2,20 +2,20 @@
   <parent>
     <groupId>org.openurp</groupId>
     <artifactId>openurp-parent</artifactId>
-    <version>0.3.22</version>
+    <version>0.3.28</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openurp.edu.fee</groupId>
   <artifactId>openurp-edu-fee-parent</artifactId>
-  <version>0.0.3</version>
+  <version>0.0.10</version>
   <packaging>pom</packaging>
   <name>OpenURP Edu Fee Parent</name>
 
   <properties>
     <bundle.symbolicName>org.openurp.edu.grade</bundle.symbolicName>
     <bundle.namespace>org.openurp.edu.grade</bundle.namespace>
-    <openurp.api.version>0.13.1</openurp.api.version>
-    <openurp.edu.base.version>0.0.37</openurp.edu.base.version>
+    <openurp.api.version>0.16.1</openurp.api.version>
+    <openurp.edu.web.version>0.1.2</openurp.edu.web.version>
   </properties>
 
   <modules>

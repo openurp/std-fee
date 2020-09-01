@@ -1,21 +1,17 @@
 [#ftl]
 [@b.head/]
 [@b.toolbar title="收费统计"/]
-<table class="indexpanel">
-  <tr>
-    <td class="index_view">
+<div class="search-container">
+    <div class="search-panel">
       [@b.form title="ui.searchForm" name="feeStatForm" action="!search" target="feeStat" theme="search"]
-        <tr>
-          <td class="search-item">
-            [@edu_base.semester name="semester.id" label="学年学期"  value=currentSemester required="true"/]
-          <td>
-        </tr>
+        [@edu.semester name="semester.id" label="学年学期"  value=currentSemester required="true"/]
         [@b.select label="收费类型" items=feeTypes?sort_by("code") value=feeTypes[0]  name="feeType.id"/]
       [/@]
-    </td>
-    <td class="index_content">[@b.div id="feeStat"/]</td>
-  </tr>
-</table>
+      </div>
+      <div class="search-list">
+    [@b.div id="feeStat"/]
+      </div>
+    </div>
 <script>
   $(function() {
     $(document).ready(function() {

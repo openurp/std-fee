@@ -19,10 +19,11 @@
           [@b.select label="收费类型" items=feeTypes?sort_by("code") empty="..."  name="o.bill.feeType.id"/]
           [@b.select label="缴费状态" items={"1":"已缴","0":"未缴"} empty="..."  name="o.paid"/]
         [/@]
-      </td>
-      <td class="index_content">[@b.div id="orders"/]</td>
-    </tr>
-  </table>
+      </div>
+      <div class="search-list">
+      [@b.div id="orders"/]
+      </div>
+    </div>
   <script>
     $(function() {
       $(document).ready(function() {

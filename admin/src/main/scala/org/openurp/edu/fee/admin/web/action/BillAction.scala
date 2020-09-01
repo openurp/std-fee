@@ -18,19 +18,25 @@
  */
 package org.openurp.edu.fee.admin.web.action
 
+import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 import java.time.Instant
 
 import org.beangle.commons.collection.{Collections, Order}
 import org.beangle.commons.lang.Strings
 import org.beangle.data.dao.OqlBuilder
+import org.beangle.data.transfer.excel.ExcelSchema
+import org.beangle.data.transfer.importer.ImportSetting
+import org.beangle.data.transfer.importer.listener.ForeignerListener
 import org.beangle.security.Securities
-import org.beangle.webmvc.api.view.View
+import org.beangle.webmvc.api.annotation.response
+import org.beangle.webmvc.api.view.{Stream, View}
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.code.edu.model.EducationLevel
 import org.openurp.edu.base.model.{Semester, Student, StudentState}
-import org.openurp.edu.base.web.ProjectSupport
+import org.openurp.edu.web.ProjectSupport
 import org.openurp.edu.fee.admin.data.BillInitStudent
 import org.openurp.edu.fee.admin.utils.StudentUtils
+import org.openurp.edu.fee.admin.web.helper.BillImportListener
 import org.openurp.edu.fee.model.{Bill, FeeType, TuitionConfig}
 
 
@@ -42,7 +48,7 @@ class BillAction extends RestfulAction[Bill] with ProjectSupport {
   override def indexSetting(): Unit = {
     put("feeTypes", getCodes(classOf[FeeType]))
     put("levels", getCodes(classOf[EducationLevel]))
-    put("project",getProject)
+    put("project", getProject)
     put("currentSemester", getCurrentSemester)
     super.indexSetting()
   }
@@ -287,5 +293,35 @@ class BillAction extends RestfulAction[Bill] with ProjectSupport {
     bill.std.id = longId("bill.std")
     bill.updatedBy = Securities.user
     super.saveAndRedirect(bill)
+  }
+
+  @response
+  def downloadTemplate(): Any = {
+    val feeTypes = getCodes(classOf[FeeType]).map(_.name)
+    val semesters = entityDao.search(OqlBuilder.from(classOf[Semester], "s").orderBy("s.code")).map(_.code)
+
+    val schema = new ExcelSchema()
+    val sheet = schema.createScheet("数据模板")
+    sheet.title("收费信息模板")
+    sheet.remark("特别说明：\n1、不可改变本表格的行列结构以及批注，否则将会导入失败！\n2、须按照规格说明的格式填写。\n3、可以多次导入，重复的信息会被新数据更新覆盖。\n4、保存的excel文件名称可以自定。")
+    sheet.add("学号", "bill.std").length(15).required()
+    sheet.add("学年学期", "bill.semester.code").ref(semesters).required()
+    sheet.add("收费类型", "bill.feeType.name").ref(feeTypes).required()
+    sheet.add("应缴(元)", "bill.amount").decimal().required()
+    sheet.add("已缴(元)", "bill.payed").decimal()
+
+    val code = schema.createScheet("数据字典")
+    code.add("收费类型").data(feeTypes)
+    code.add("学年学期").data(semesters)
+    val os = new ByteArrayOutputStream()
+    schema.generate(os)
+    Stream(new ByteArrayInputStream(os.toByteArray), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "收费信息.xlsx")
+  }
+
+
+  protected override def configImport(setting: ImportSetting): Unit = {
+    val fl = new ForeignerListener(entityDao)
+    fl.addForeigerKey("name")
+    setting.listeners = List(fl, new BillImportListener(getProject, entityDao))
   }
 }

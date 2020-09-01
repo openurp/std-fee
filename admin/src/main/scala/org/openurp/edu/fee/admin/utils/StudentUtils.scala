@@ -28,7 +28,7 @@ import scala.collection.mutable
 class StudentUtils {
 
 	def getStudentState(student: Student, studentStateId: Long): StudentState = {
-		if (null == student || null == studentStateId) return null
+		if (null == student ||   studentStateId==0) return null
 		student.states.foreach(state => {
 			if (state.id.equals(studentStateId)) state
 		})
