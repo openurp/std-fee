@@ -20,7 +20,7 @@ package org.openurp.edu.fee.admin.web.action
 
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.edu.base.web.ProjectSupport
+import org.openurp.edu.web.ProjectSupport
 import org.openurp.edu.fee.app.model.OnlinePaySetting
 import org.openurp.edu.fee.model.FeeType
 

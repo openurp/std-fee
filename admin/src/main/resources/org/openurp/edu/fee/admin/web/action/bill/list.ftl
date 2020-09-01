@@ -1,5 +1,6 @@
 [#ftl]
 [@b.head/]
+
   [@b.grid items=bills var="bill"]
     [@b.gridbar]
       bar.addItem("${b.text("action.modify")}", action.edit());

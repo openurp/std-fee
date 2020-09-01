@@ -23,7 +23,7 @@ import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.code.edu.model.EducationLevel
 import org.openurp.edu.base.model.Major
-import org.openurp.edu.base.web.ProjectSupport
+import org.openurp.edu.web.ProjectSupport
 import org.openurp.edu.fee.model.{TuitionConfig, FeeType}
 
 class TuitionConfigAction extends RestfulAction[TuitionConfig] with ProjectSupport {

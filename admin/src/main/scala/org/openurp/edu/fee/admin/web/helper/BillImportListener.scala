@@ -43,13 +43,15 @@ class BillImportListener(project: Project, entityDao: EntityDao) extends ImportL
         tr.addFailure("不存在的学号", stdCode)
       } else {
         data.put("bill.std", stds.head)
-        val query = OqlBuilder.from(classOf[Bill], "t")
-          .where("t.std=:std", stds.head)
-          .where("t.feeType.name=:feeTypeName", feeTypeName.toString)
-          .where("t.semester.code=:semesterCode", semesterCode.toString.trim())
-        val cs = entityDao.search(query)
-        if (cs.nonEmpty) {
-          transfer.current = cs.head
+        if(data.get("new").isEmpty){
+          val query = OqlBuilder.from(classOf[Bill], "t")
+            .where("t.std=:std", stds.head)
+            .where("t.feeType.name=:feeTypeName", feeTypeName.toString)
+            .where("t.semester.code=:semesterCode", semesterCode.toString.trim())
+          val cs = entityDao.search(query)
+          if (cs.nonEmpty) {
+            transfer.current = cs.head
+          }
         }
       }
     }

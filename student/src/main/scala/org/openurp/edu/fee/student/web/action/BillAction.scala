@@ -21,17 +21,25 @@ package org.openurp.edu.fee.student.web.action
 import java.time.LocalDate
 
 import org.beangle.data.dao.OqlBuilder
+import org.beangle.security.Securities
 import org.beangle.webmvc.api.annotation.{mapping, param}
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.EntityAction
-import org.openurp.edu.base.web.ProjectSupport
+import org.openurp.edu.base.model.Student
 import org.openurp.edu.fee.app.model.OnlinePaySetting
 import org.openurp.edu.fee.model.{Bill, Order}
 import org.openurp.edu.fee.pay.PayService
+import org.openurp.edu.web.ProjectSupport
 
 class BillAction extends EntityAction[Bill] with ProjectSupport {
 
   var payService: PayService = _
+
+  private def getStudent: Student = {
+    val query = OqlBuilder.from(classOf[Student], "std")
+    query.where("std.project=:project and std.user.code=:code", getProject, Securities.user)
+    entityDao.search(query).head
+  }
 
   def index(): View = {
     val std = getStudent
