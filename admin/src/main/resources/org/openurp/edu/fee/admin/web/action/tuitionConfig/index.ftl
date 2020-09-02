@@ -3,9 +3,8 @@
 [@b.toolbar title="学费配置"]
   bar.addBack();
 [/@]
-  <table class="indexpanel">
-    <tr>
-      <td class="index_view" >
+  <div class="search-container">
+      <div class="search-panel">
         [@b.form name="tuitionConfigearchForm" action="!search" target="tuitionConfigs" title="ui.searchForm" theme="search"]
           [@b.select label="学历层次" items=levels?sort_by("code") empty="..."  name="tuitionConfig.level.id"/]
           [@b.select label="院系" items=departments?sort_by("code") empty="..."  name="tuitionConfig.department.id"/]

@@ -10,9 +10,8 @@
        bg.form.submit(document.configForm,"${b.url("fee-type-config!search")}");
      }
   [/@]
-  <table class="indexpanel">
-    <tr>
-      <td class="index_view">
+  <div class="search-container">
+      <div class="search-panel">
         [@b.form title="ui.searchForm" name="orderSearchForm" action="!search" target="orders" theme="search"]
           [@b.textfields names="o.std.user.code;学号,o.std.user.name;姓名"/]
           [@b.select label="学历层次" items=levels?sort_by("code") empty="..."  name="o.std.level.id"/]
