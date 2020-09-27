@@ -1,24 +1,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
-    <groupId>org.openurp.edu.fee</groupId>
-    <artifactId>openurp-edu-fee-parent</artifactId>
+    <groupId>org.openurp.std.fee</groupId>
+    <artifactId>openurp-std-fee-parent</artifactId>
     <version>0.0.12</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>openurp-edu-fee-studentapp</artifactId>
+  <artifactId>openurp-std-fee-studentapp</artifactId>
   <packaging>war</packaging>
   <name>OpenURP Edu Fee StudentApp</name>
 
   <properties>
-    <bundle.symbolicName>org.openurp.edu.fee.studentapp</bundle.symbolicName>
-    <bundle.namespace>org.openurp.edu.fee</bundle.namespace>
+    <bundle.symbolicName>org.openurp.std.fee.studentapp</bundle.symbolicName>
+    <bundle.namespace>org.openurp.std.fee</bundle.namespace>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>org.openurp.edu.fee</groupId>
-      <artifactId>openurp-edu-fee-student</artifactId>
+      <groupId>org.openurp.std.fee</groupId>
+      <artifactId>openurp-std-fee-student</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

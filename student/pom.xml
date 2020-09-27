@@ -1,25 +1,25 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
-    <groupId>org.openurp.edu.fee</groupId>
-    <artifactId>openurp-edu-fee-parent</artifactId>
+    <groupId>org.openurp.std.fee</groupId>
+    <artifactId>openurp-std-fee-parent</artifactId>
     <version>0.0.12</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.openurp.edu.fee</groupId>
-  <artifactId>openurp-edu-fee-student</artifactId>
+  <groupId>org.openurp.std.fee</groupId>
+  <artifactId>openurp-std-fee-student</artifactId>
   <packaging>jar</packaging>
   <name>OpenURP Edu Fee Student</name>
 
   <properties>
-    <bundle.symbolicName>org.openurp.edu.fee.student</bundle.symbolicName>
-    <bundle.namespace>org.openurp.edu.fee</bundle.namespace>
+    <bundle.symbolicName>org.openurp.std.fee.student</bundle.symbolicName>
+    <bundle.namespace>org.openurp.std.fee</bundle.namespace>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>org.openurp.edu.fee</groupId>
-      <artifactId>openurp-edu-fee-core</artifactId>
+      <groupId>org.openurp.std.fee</groupId>
+      <artifactId>openurp-std-fee-core</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -33,8 +33,8 @@
       <version>${openurp.edu.web.version}</version>
     </dependency>
     <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
     </dependency>
   </dependencies>
 </project>
