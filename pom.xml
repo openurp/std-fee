@@ -15,7 +15,7 @@
     <bundle.symbolicName>org.openurp.std.fee</bundle.symbolicName>
     <bundle.namespace>org.openurp.std.fee</bundle.namespace>
     <openurp.api.version>0.18.0</openurp.api.version>
-    <openurp.edu.web.version>0.1.6</openurp.edu.web.version>
+    <openurp.edu.web.version>0.1.7-SNAPSHOT</openurp.edu.web.version>
   </properties>
 
   <modules>

@@ -35,7 +35,7 @@ class BillAction extends EntityAction[Bill] with ProjectSupport {
   var payService: PayService = _
 
   def index(): View = {
-    val std = getLogin(classOf[Student])
+    val std = getUser(classOf[Student])
     val query = OqlBuilder.from(classOf[Bill], "bill")
     query.where("bill.std=:std", std)
     val bills = entityDao.search(query)
@@ -50,13 +50,13 @@ class BillAction extends EntityAction[Bill] with ProjectSupport {
   }
 
   def displayUserInfo(): View = {
-    put("std", getLogin(classOf[Student]))
+    put("std", getUser(classOf[Student]))
     put("bill", entityDao.get(classOf[Bill], longId("bill")))
     forward()
   }
 
   def saveUserInfo(): View = {
-    val std = getLogin(classOf[Student])
+    val std = getUser(classOf[Student])
     val bill = entityDao.get(classOf[Bill], longId("bill"))
     val mobile = get("mobile")
     if (mobile.nonEmpty) {
@@ -71,7 +71,7 @@ class BillAction extends EntityAction[Bill] with ProjectSupport {
   @mapping("pay/{id}")
   def pay(@param("id") id: Long): View = {
     val bill = entityDao.get(classOf[Bill], id)
-    val std = getLogin(classOf[Student])
+    val std = getUser(classOf[Student])
     put("bill", bill)
     put("std", std)
     if (bill.std == std && bill.payed <= 0) {
@@ -84,7 +84,7 @@ class BillAction extends EntityAction[Bill] with ProjectSupport {
   @mapping("check/{id}")
   def check(@param("id") id: Long): View = {
     val bill = entityDao.get(classOf[Bill], id)
-    val std = getLogin(classOf[Student])
+    val std = getUser(classOf[Student])
     put("bill", bill)
     put("std", std)
     var order: Order = null

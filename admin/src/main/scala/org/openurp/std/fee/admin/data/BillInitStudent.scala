@@ -21,57 +21,58 @@ package org.openurp.std.fee.admin.data
 
 import org.beangle.commons.collection.Collections
 import org.openurp.edu.base.model.{Semester, Student, StudentState}
-import org.openurp.std.fee.model.{Bill, TuitionConfig}
+import org.openurp.std.fee.model.TuitionConfig
 
 import scala.collection.{immutable, mutable}
-import scala.xml.Null
 
 class BillInitStudent {
 
-	var semester: Semester = _
+  var semester: Semester = _
 
-	var studentMap = Collections.newMap[Long, Student]
+  var studentMap = Collections.newMap[Long, Student]
 
-	var stateTuitionConfigMap = Collections.newMap[StudentState, TuitionConfig]
+  var stateTuitionConfigMap = Collections.newMap[StudentState, TuitionConfig]
 
-	var currentStateMap = Collections.newMap[Student, StudentState]
+  var currentStateMap = Collections.newMap[Student, StudentState]
 
-	def this(semester: Semester, students: immutable.Seq[Student], tuitionConfigMap: mutable.Map[StudentState, TuitionConfig], currentStateMap: mutable.Map[Student, StudentState]) {
-		this
-		this.semester = semester
-		//		val studentMap = Collections.newMap[Long, Student]
-		students.foreach(student => {
-			this.studentMap.put(student.id, student)
-		})
-		this.stateTuitionConfigMap = tuitionConfigMap
-		this.currentStateMap = currentStateMap
-	}
+  def this(semester: Semester, students: immutable.Seq[Student],
+           tuitionConfigMap: mutable.Map[StudentState, TuitionConfig],
+           currentStateMap: mutable.Map[Student, StudentState]) = {
+    this
+    this.semester = semester
+    //		val studentMap = Collections.newMap[Long, Student]
+    students.foreach(student => {
+      this.studentMap.put(student.id, student)
+    })
+    this.stateTuitionConfigMap = tuitionConfigMap
+    this.currentStateMap = currentStateMap
+  }
 
 
-	def getStudents(studentIds: List[Long]): mutable.Seq[Student] = {
-		if (null == studentIds) Collections.newBuffer(studentMap.values)
-		val students = Collections.newBuffer[Student]
-		studentIds.foreach(studentId => {
-			students.addOne(studentMap.get(studentId).get)
-		})
-		students
-	}
+  def getStudents(studentIds: List[Long]): mutable.Seq[Student] = {
+    if (null == studentIds) Collections.newBuffer(studentMap.values)
+    val students = Collections.newBuffer[Student]
+    studentIds.foreach(studentId => {
+      students.addOne(studentMap.get(studentId).get)
+    })
+    students
+  }
 
-	def getTuitionConfig(student: Student): TuitionConfig = getTuitionConfig(getCurrentState(student))
+  def getTuitionConfig(student: Student): TuitionConfig = getTuitionConfig(getCurrentState(student))
 
-	def getTuitionConfig(studentState: StudentState): TuitionConfig = stateTuitionConfigMap.get(studentState).orNull
+  def getTuitionConfig(studentState: StudentState): TuitionConfig = stateTuitionConfigMap.get(studentState).orNull
 
-	def getCurrentState(student: Student): StudentState = currentStateMap.get(student).orNull
+  def getCurrentState(student: Student): StudentState = currentStateMap.get(student).orNull
 
-	def getCurrentStateMap(studentIds: List[Long]): mutable.Map[Student, StudentState] = {
-		val currentStateMap = Collections.newMap[Student, StudentState]
-		val students = getStudents(studentIds)
-		if (!students.isEmpty) {
-			students.foreach(student => {
-				val studentState = getCurrentState(student)
-				if (null != studentState) currentStateMap.put(student, studentState)
-			})
-		}
-		currentStateMap
-	}
+  def getCurrentStateMap(studentIds: List[Long]): mutable.Map[Student, StudentState] = {
+    val currentStateMap = Collections.newMap[Student, StudentState]
+    val students = getStudents(studentIds)
+    if (!students.isEmpty) {
+      students.foreach(student => {
+        val studentState = getCurrentState(student)
+        if (null != studentState) currentStateMap.put(student, studentState)
+      })
+    }
+    currentStateMap
+  }
 }
