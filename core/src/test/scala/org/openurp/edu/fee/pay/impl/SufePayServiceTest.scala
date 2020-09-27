@@ -16,14 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.edu.fee.pay.impl
+package org.openurp.std.fee.pay.impl
 
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 import org.junit.runner.RunWith
-import org.openurp.edu.fee.model.Product
-import org.scalatest.Matchers
+import org.openurp.std.fee.model.Product
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatestplus.junit.JUnitRunner
 
