@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <mvc>
-  <profile name="openurp-edu-fee-student" package="org.openurp.edu.fee.student.web.action">
+  <profile name="openurp-std-fee-student" package="org.openurp.std.fee.student.web.action">
     <url path="/" suffix=""  style="seo" />
     <interceptors>
       <interceptor name="web.Interceptor.hibernate"/>
