@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.openurp.std.fee</groupId>
     <artifactId>openurp-std-fee-parent</artifactId>
-    <version>0.0.12</version>
+    <version>0.0.13</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openurp.std.fee</groupId>
