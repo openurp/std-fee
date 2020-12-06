@@ -32,8 +32,8 @@ import org.beangle.webmvc.api.annotation.response
 import org.beangle.webmvc.api.view.{Stream, View}
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.code.edu.model.EducationLevel
-import org.openurp.edu.base.model.{Semester, Student, StudentState}
-import org.openurp.edu.web.ProjectSupport
+import org.openurp.base.edu.model.{Semester, Student, StudentState}
+import org.openurp.boot.edu.helper.ProjectSupport
 import org.openurp.std.fee.admin.data.BillInitStudent
 import org.openurp.std.fee.admin.utils.StudentUtils
 import org.openurp.std.fee.admin.web.helper.BillImportListener

@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.openurp.std.fee</groupId>
     <artifactId>openurp-std-fee-parent</artifactId>
-    <version>0.0.13</version>
+    <version>0.0.14</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openurp.std.fee</groupId>
@@ -23,14 +23,14 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.openurp.edu</groupId>
-      <artifactId>openurp-edu-web</artifactId>
-      <version>${openurp.edu.web.version}</version>
+      <groupId>org.openurp.base</groupId>
+      <artifactId>openurp-base-tag</artifactId>
+      <version>${openurp.base.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.openurp.edu</groupId>
-      <artifactId>openurp-edu-boot</artifactId>
-      <version>${openurp.edu.web.version}</version>
+      <groupId>org.openurp.boot</groupId>
+      <artifactId>openurp-boot-web</artifactId>
+      <version>${openurp.boot.version}</version>
     </dependency>
     <dependency>
       <groupId>jakarta.servlet</groupId>

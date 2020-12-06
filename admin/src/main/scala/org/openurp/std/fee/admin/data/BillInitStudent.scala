@@ -20,7 +20,7 @@ package org.openurp.std.fee.admin.data
 
 
 import org.beangle.commons.collection.Collections
-import org.openurp.edu.base.model.{Semester, Student, StudentState}
+import org.openurp.base.edu.model.{Semester, Student, StudentState}
 import org.openurp.std.fee.model.TuitionConfig
 
 import scala.collection.{immutable, mutable}

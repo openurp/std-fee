@@ -24,11 +24,11 @@ import org.beangle.data.dao.OqlBuilder
 import org.beangle.webmvc.api.annotation.{mapping, param}
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.EntityAction
-import org.openurp.edu.base.model.Student
+import org.openurp.base.edu.model.Student
 import org.openurp.std.fee.app.model.OnlinePaySetting
 import org.openurp.std.fee.model.{Bill, Order}
 import org.openurp.std.fee.pay.PayService
-import org.openurp.edu.web.ProjectSupport
+import org.openurp.boot.edu.helper.ProjectSupport
 
 class BillAction extends EntityAction[Bill] with ProjectSupport {
 
