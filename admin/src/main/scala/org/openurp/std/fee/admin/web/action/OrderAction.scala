@@ -21,7 +21,7 @@ package org.openurp.std.fee.admin.web.action
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.code.edu.model.EducationLevel
-import org.openurp.edu.web.ProjectSupport
+import org.openurp.boot.edu.helper.ProjectSupport
 import org.openurp.std.fee.model.{FeeType, Order}
 import org.openurp.std.fee.pay.PayService
 

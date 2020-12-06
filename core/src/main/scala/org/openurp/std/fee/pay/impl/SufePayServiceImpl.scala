@@ -112,7 +112,7 @@ class SufePayServiceImpl extends PayService with Logging with Initializing {
 
   protected[impl] def createOrder(bill: Bill, params: Map[String, String]): Order = {
     val std = bill.std
-    val inputs = Map("inputIdNo" -> std.person.code, "inputStuNo" -> std.user.code, "inputStuName" -> std.user.name, "inputPhone" -> std.user.mobile.getOrElse("--"))
+    val inputs = Map("inputIdNo" -> std.person.get.code, "inputStuNo" -> std.user.code, "inputStuName" -> std.user.name, "inputPhone" -> std.user.mobile.getOrElse("--"))
     val order = createOrder(products(bill.feeType.id), bill.amount, inputs)
     order.bill = bill
     order.std = bill.std

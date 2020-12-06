@@ -21,7 +21,7 @@ package org.openurp.std.fee.admin.utils
 import java.time.LocalDate
 
 import org.beangle.commons.collection.Collections
-import org.openurp.edu.base.model.{Semester, Student, StudentState}
+import org.openurp.base.edu.model.{Semester, Student, StudentState}
 
 import scala.collection.mutable
 

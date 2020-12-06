@@ -21,7 +21,7 @@ package org.openurp.std.fee.admin.web.action
 import org.beangle.data.dao.OqlBuilder
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.code.edu.model.EducationLevel
-import org.openurp.edu.web.ProjectSupport
+import org.openurp.boot.edu.helper.ProjectSupport
 import org.openurp.std.fee.model.{Bill, FeeType}
 
 class BillSearchAction extends RestfulAction[Bill] with ProjectSupport {

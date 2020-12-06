@@ -23,7 +23,7 @@ import java.time.LocalDate
 import org.beangle.commons.collection.Collections
 import org.beangle.data.model.IntId
 import org.beangle.data.model.pojo.DateRange
-import org.openurp.edu.base.model.Semester
+import org.openurp.base.edu.model.Semester
 import org.openurp.std.fee.model.FeeType
 
 import scala.collection.mutable

@@ -15,7 +15,7 @@
 <div class="search-container">
     <div class="search-panel">
         [@b.form title="ui.searchForm" name="billSearchForm" action="!search" target="bills" theme="search"]
-          [@edu.semester name="bill.semester.id" label="学年学期"  value=currentSemester required="false"/]
+          [@urp_base.semester name="bill.semester.id" label="学年学期"  value=currentSemester required="false"/]
           [@b.textfields names="bill.std.user.code;学号,bill.std.user.name;姓名"/]
           [@b.select label="学历层次" items=levels?sort_by("code") empty="..."  name="bill.std.level.id"/]
           [@b.select label="收费类型" items=feeTypes?sort_by("code") empty="..."  name="bill.feeType.id"/]
