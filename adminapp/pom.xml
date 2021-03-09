@@ -8,7 +8,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>openurp-std-fee-adminapp</artifactId>
   <packaging>war</packaging>
-  <name>OpenURP Edu Fee Adminapp</name>
+  <name>OpenURP Std Fee Adminapp</name>
 
   <properties>
     <bundle.symbolicName>org.openurp.std.fee.adminapp</bundle.symbolicName>

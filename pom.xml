@@ -9,7 +9,7 @@
   <artifactId>openurp-std-fee-parent</artifactId>
   <version>0.0.17</version>
   <packaging>pom</packaging>
-  <name>OpenURP Edu Fee Parent</name>
+  <name>OpenURP Std Fee Parent</name>
 
   <properties>
     <bundle.symbolicName>org.openurp.std.fee</bundle.symbolicName>
