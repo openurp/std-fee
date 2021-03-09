@@ -3,13 +3,13 @@
   <parent>
     <groupId>org.openurp.std.fee</groupId>
     <artifactId>openurp-std-fee-parent</artifactId>
-    <version>0.0.17-SNAPSHOT</version>
+    <version>0.0.17</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openurp.std.fee</groupId>
   <artifactId>openurp-std-fee-core</artifactId>
   <packaging>jar</packaging>
-  <name>OpenURP Edu Fee Core</name>
+  <name>OpenURP Std Fee Core</name>
 
   <properties>
     <bundle.symbolicName>org.openurp.std.fee.core</bundle.symbolicName>
