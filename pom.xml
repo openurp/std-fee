@@ -7,16 +7,16 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openurp.std.fee</groupId>
   <artifactId>openurp-std-fee-parent</artifactId>
-  <version>0.0.16</version>
+  <version>0.0.17</version>
   <packaging>pom</packaging>
-  <name>OpenURP Edu Fee Parent</name>
+  <name>OpenURP Std Fee Parent</name>
 
   <properties>
     <bundle.symbolicName>org.openurp.std.fee</bundle.symbolicName>
     <bundle.namespace>org.openurp.std.fee</bundle.namespace>
-    <openurp.api.version>0.20.4</openurp.api.version>
-    <openurp.boot.version>0.0.2</openurp.boot.version>
-    <openurp.base.version>0.1.11</openurp.base.version>
+    <openurp.api.version>0.21.1</openurp.api.version>
+    <openurp.boot.version>0.0.3</openurp.boot.version>
+    <openurp.base.version>0.1.14</openurp.base.version>
   </properties>
 
   <modules>
