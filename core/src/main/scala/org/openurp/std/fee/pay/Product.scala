@@ -16,21 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.std.fee.app.model
+package org.openurp.std.fee.pay
 
-import org.beangle.data.model.IntId
-import org.openurp.std.fee.model.FeeType
-
-class FeeTypeConfig extends IntId {
-
-  var feeType: FeeType = _
-
-  var productId: Int = _
-
-  var systemCode:String=_
-
-  var systemKey:String=_
-
-  var secret: String = _
-
-}
+case class FeeClient(id: Int, systemCode:String,systemKey:String,secret: String)

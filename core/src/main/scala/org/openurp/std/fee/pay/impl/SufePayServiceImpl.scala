@@ -18,39 +18,118 @@
  */
 package org.openurp.std.fee.pay.impl
 
-import java.io.OutputStreamWriter
+import com.google.gson.Gson
+import org.beangle.commons.activation.MediaTypes
+import org.beangle.commons.bean.Initializing
+import org.beangle.commons.codec.binary.Base64
+import org.beangle.commons.codec.digest.Digests
+import org.beangle.commons.io.{Files, IOs}
+import org.beangle.commons.lang.Strings
+import org.beangle.commons.logging.Logging
+import org.beangle.commons.net.http.{HttpUtils, Https}
+import org.beangle.data.dao.{EntityDao, OqlBuilder}
+import org.beangle.ems.app.EmsApp
+import org.openurp.std.fee.app.model.FeeTypeConfig
+import org.openurp.std.fee.model.{Bill, Order}
+import org.openurp.std.fee.pay.impl.SufePayServiceImpl.getInvoice
+import org.openurp.std.fee.pay.{FeeClient, PayService}
+
+import java.io.{File, FileInputStream, OutputStreamWriter}
 import java.net.{HttpURLConnection, URL}
 import java.time.format.DateTimeFormatter
 import java.time.{Duration, Instant, LocalDateTime, ZoneId}
 import java.{util => ju}
 
-import com.google.gson.Gson
-import org.beangle.commons.activation.MediaTypes
-import org.beangle.commons.bean.Initializing
-import org.beangle.commons.codec.digest.Digests
-import org.beangle.commons.io.IOs
-import org.beangle.commons.logging.Logging
-import org.beangle.commons.net.http.{HttpUtils, Https}
-import org.beangle.data.dao.{EntityDao, OqlBuilder}
-import org.openurp.std.fee.app.model.FeeTypeConfig
-import org.openurp.std.fee.model.{Bill, Order, Product}
-import org.openurp.std.fee.pay.PayService
+object SufePayServiceImpl {
+  def getInvoice(orderNo: String, systemCode: String, systemKey: String): Tuple2[String, String] = {
+    val seed = s"order_no=${orderNo}&systemCode=${systemCode}&systemKey=${systemKey}"
+    val md5Key = Digests.md5Hex(seed).toUpperCase()
+
+    val content = s"order_no=${orderNo}&systemCode=${systemCode}&md5Key=${md5Key}"
+
+    val url = new URL("http://wechatpay.shufe.edu.cn/orderbill.ashx")
+    val httpCon = url.openConnection.asInstanceOf[HttpURLConnection]
+    Https.noverify(httpCon)
+    httpCon.setDoOutput(true)
+    httpCon.setRequestMethod("POST")
+    httpCon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
+    val os = httpCon.getOutputStream
+    val osw = new OutputStreamWriter(os, "UTF-8")
+    osw.write(content)
+    osw.flush()
+    osw.close()
+    os.close() //don't forget to close the OutputStream
+    httpCon.connect()
+    val lines = IOs.readString(httpCon.getInputStream)
+    if (lines.contains("FAIL")) {
+      val error = Strings.substringBetween(lines, "<return_msg><![CDATA[", "]]>")
+      ("FAIL", error)
+    } else if (lines.contains("error")) {
+      val error = Strings.substringBetween(lines, "error:\"", "\"")
+      ("ERROR", error)
+    } else {
+      val imgbase64 = Strings.substringBetween(lines, "[<img src='", "'/>]]></img>")
+      if(Strings.isBlank(imgbase64)){
+        ("ERROR", Strings.substringBetween(lines, "<img><![CDATA[", "]]></img>"))
+      }else{
+        ("SUCCESS", imgbase64)
+      }
+    }
+  }
+
+}
 
 /** SUFE 支付服务
  */
 class SufePayServiceImpl extends PayService with Logging with Initializing {
   var entityDao: EntityDao = _
 
-  var products: Map[Int, Product] = Map.empty
+  var clients: Map[Int, FeeClient] = Map.empty
 
   //one hour
   var orderIdleSeconds = 30 * 60
 
   override def init(): Unit = {
-    val configs = entityDao.getAll(classOf[FeeTypeConfig])
-    products = configs.map { config =>
-      (config.feeType.id, Product(config.productId, config.secret))
+    val cfgs = entityDao.getAll(classOf[FeeTypeConfig])
+    clients = cfgs.map { cfg =>
+      (cfg.feeType.id, FeeClient(cfg.productId, cfg.systemCode, cfg.systemKey, cfg.secret))
     }.toMap
+  }
+
+  override def getInvoiceUrl(order: Order): (Option[String],String) = {
+    val repo = EmsApp.getBlobRepository(true)
+    order.invoicePath match {
+      case Some(p) => (repo.path(p),"SUCCESS")
+      case None =>
+        if (order.paid && order.payAt.isDefined) {
+          val client = clients(order.bill.feeType.id)
+          val result = getInvoice(order.code, client.systemCode, client.systemKey)
+          if (result._1 == "SUCCESS") {
+            val bytes = Base64.decode(result._2.substring("data:image/png;base64,".length).toCharArray)
+            val f = File.createTempFile("invoice", ".png")
+            val os = Files.writeOpen(f)
+            os.write(bytes)
+            os.close()
+            val repo = EmsApp.getBlobRepository(true)
+            val u = order.bill.std.user
+            try {
+              val meta = repo.upload("/invoice/" + order.payAt.get.atZone(ZoneId.systemDefault()).getYear, new FileInputStream(f), order.code + ".png", u.code + " " + u.name)
+              order.invoicePath = Some(meta.filePath)
+              entityDao.saveOrUpdate(order)
+              f.delete()
+              (repo.path(meta.filePath),"SUCCESS")
+            } catch {
+              case e: Throwable =>
+                e.printStackTrace()
+                (None,e.getMessage)
+            }
+          } else {
+            (None,result._2)
+          }
+        } else {
+          (None,"订单未支付")
+        }
+    }
   }
 
   override def getOrCreateOrder(bill: Bill, params: Map[String, String]): Order = {
@@ -89,7 +168,7 @@ class SufePayServiceImpl extends PayService with Logging with Initializing {
 
   private def refreshBillByOrder(bill: Bill, order: Order): Unit = {
     if (!order.paid) {
-      val o = checkOrder(products(bill.feeType.id), order.code)
+      val o = checkOrder(clients(bill.feeType.id), order.code)
       order.status = o.status
       order.paid = o.paid
       order.channel = o.channel
@@ -112,8 +191,8 @@ class SufePayServiceImpl extends PayService with Logging with Initializing {
 
   protected[impl] def createOrder(bill: Bill, params: Map[String, String]): Order = {
     val std = bill.std
-    val inputs = Map("inputIdNo" -> std.person.get.code, "inputStuNo" -> std.user.code, "inputStuName" -> std.user.name, "inputPhone" -> std.user.mobile.getOrElse("--"))
-    val order = createOrder(products(bill.feeType.id), bill.amount, inputs)
+    val inputs = Map("inputIdNo" -> std.person.code, "inputStuNo" -> std.user.code, "inputStuName" -> std.user.name, "inputPhone" -> std.user.mobile.getOrElse("--"))
+    val order = createOrder(clients(bill.feeType.id), bill.amount, inputs)
     order.bill = bill
     order.std = bill.std
     order.amount = bill.amount
@@ -125,12 +204,12 @@ class SufePayServiceImpl extends PayService with Logging with Initializing {
 
   /** 创建订单
    *
-   * @param product
+   * @param client
    * @param amount
    * @param inputs
    * @return
    */
-  protected[impl] def createOrder(product: Product, amount: Int, inputs: Map[String, String]): Order = {
+  protected[impl] def createOrder(client: FeeClient, amount: Int, inputs: Map[String, String]): Order = {
     val url = new URL("https://mp.sufe.edu.cn/jfapi/shufe/pay/api/create")
     val httpCon = url.openConnection.asInstanceOf[HttpURLConnection]
     Https.noverify(httpCon)
@@ -139,7 +218,7 @@ class SufePayServiceImpl extends PayService with Logging with Initializing {
     httpCon.setRequestProperty("Content-Type", MediaTypes.ApplicationJson.toString)
     val os = httpCon.getOutputStream
     val osw = new OutputStreamWriter(os, "UTF-8")
-    osw.write(prepareData(product, amount, inputs))
+    osw.write(prepareData(client, amount, inputs))
     osw.flush()
     osw.close()
     os.close() //don't forget to close the OutputStream
@@ -172,18 +251,18 @@ class SufePayServiceImpl extends PayService with Logging with Initializing {
 
   /** 准备创建订单的JSON数据
    *
-   * @param product
+   * @param client
    * @param amount
    * @param inputs
    * @return
    */
-  protected[impl] def prepareData(product: Product, amount: Int, inputs: Map[String, String]): String = {
+  protected[impl] def prepareData(client: FeeClient, amount: Int, inputs: Map[String, String]): String = {
     val data = new java.util.HashMap[String, Any]
-    data.put("productId", product.id)
+    data.put("productId", client.id)
     data.put("payAmount", amount)
     val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
     data.put("timestamp", timestamp)
-    data.put("sign", sign(product, timestamp, amount))
+    data.put("sign", sign(client, timestamp, amount))
     inputs foreach { case (k, v) =>
       data.put(k, v)
     }
@@ -192,13 +271,13 @@ class SufePayServiceImpl extends PayService with Logging with Initializing {
 
   /** 签名订单信息
    *
-   * @param product
+   * @param client
    * @param timestamp
    * @param amount
    * @return
    */
-  protected[impl] def sign(product: Product, timestamp: String, amount: Int): String = {
-    val waitSign = s"productId=${product.id}&payAmount=${amount}&timestamp=${timestamp}&secret=${product.secret}"
+  protected[impl] def sign(client: FeeClient, timestamp: String, amount: Int): String = {
+    val waitSign = s"productId=${client.id}&payAmount=${amount}&timestamp=${timestamp}&secret=${client.secret}"
     Digests.md5Hex(Digests.md5Hex(waitSign)).toUpperCase()
   }
 
@@ -208,15 +287,15 @@ class SufePayServiceImpl extends PayService with Logging with Initializing {
    * @param orderNo
    * @return
    */
-  protected[impl] def checkOrder(product: Product, orderNo: String): Order = {
+  protected[impl] def checkOrder(product: FeeClient, orderNo: String): Order = {
     val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
     val queryString = s"productId=${product.id}&timestamp=${timestamp}&secret=${product.secret}"
     val sign = Digests.md5Hex(Digests.md5Hex(queryString)).toUpperCase()
     val url = s"https://mp.sufe.edu.cn/jfadmin/admin/open/pay/order/get?orderNo=${orderNo}&" + queryString + s"&sign=${sign}"
-    val res =HttpUtils.getText(url)
-    if(res.status ==200){
+    val res = HttpUtils.getText(url)
+    if (res.status == 200) {
       parseOrderStatus(res.getText)
-    }else{
+    } else {
       null
     }
   }

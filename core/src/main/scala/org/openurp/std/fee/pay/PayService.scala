@@ -25,4 +25,6 @@ trait PayService {
   def getOrCreateOrder(bill: Bill, params: Map[String, String]): Order
 
   def refreshBill(bill: Bill): Order
+
+  def getInvoiceUrl(order:Order):(Option[String],String)
 }

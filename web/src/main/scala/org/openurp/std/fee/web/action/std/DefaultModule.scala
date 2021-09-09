@@ -16,21 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.std.fee.app.model
+package org.openurp.std.fee.web.action.std
 
-import org.beangle.data.model.IntId
-import org.openurp.std.fee.model.FeeType
+import org.beangle.cdi.bind.BindModule
+import org.openurp.std.fee.pay.impl.SufePayServiceImpl
 
-class FeeTypeConfig extends IntId {
-
-  var feeType: FeeType = _
-
-  var productId: Int = _
-
-  var systemCode:String=_
-
-  var systemKey:String=_
-
-  var secret: String = _
-
+class DefaultModule extends BindModule {
+  override protected def binding(): Unit = {
+    bind(classOf[BillAction])
+    bind(classOf[SufePayServiceImpl])
+  }
 }

@@ -16,21 +16,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.std.fee.app.model
+package org.openurp.std.fee.web.data
 
-import org.beangle.data.model.IntId
-import org.openurp.std.fee.model.FeeType
+import org.openurp.base.model.Department
 
-class FeeTypeConfig extends IntId {
+class BillStat {
 
-  var feeType: FeeType = _
+  var department: Department = _
 
-  var productId: Int = _
+  var payedCount: Long = _
 
-  var systemCode:String=_
+  var payedValue: Double = _
 
-  var systemKey:String=_
+  var payCount: Long = _
 
-  var secret: String = _
+  def this(department: Department, payedCount: Long, payedValue: Double  , payCount: Long)= {
+    this
+    this.department = department
+    this.payedCount = payedCount
+    this.payedValue = payedValue
+    this.payCount = payCount
+  }
+
+  def getUnpayCount: Long = payCount - payedCount
+
+  def getPayedRate: Double = payedCount * 1.0 / payCount
 
 }

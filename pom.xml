@@ -2,7 +2,7 @@
   <parent>
     <groupId>org.openurp</groupId>
     <artifactId>openurp-parent</artifactId>
-    <version>0.4.8</version>
+    <version>0.4.14</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openurp.std.fee</groupId>
@@ -14,16 +14,14 @@
   <properties>
     <bundle.symbolicName>org.openurp.std.fee</bundle.symbolicName>
     <bundle.namespace>org.openurp.std.fee</bundle.namespace>
-    <openurp.api.version>0.21.1</openurp.api.version>
-    <openurp.boot.version>0.0.3</openurp.boot.version>
-    <openurp.base.version>0.1.14</openurp.base.version>
+    <openurp.api.version>0.23.2-SNAPSHOT</openurp.api.version>
+    <openurp.starter.version>0.0.8-SNAPSHOT</openurp.starter.version>
+    <openurp.base.version>0.1.19-SNAPSHOT</openurp.base.version>
   </properties>
 
   <modules>
     <module>core</module>
-    <module>admin</module>
-    <module>adminapp</module>
-    <module>student</module>
-    <module>studentapp</module>
+    <module>web</module>
+    <module>webapp</module>
   </modules>
 </project>

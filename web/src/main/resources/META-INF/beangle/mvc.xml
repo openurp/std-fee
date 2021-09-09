@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<mvc>
+  <profile name="openurp-std-fee" package="org.openurp.std.fee.web.action">
+    <url path="/" suffix=""  style="seo" />
+    <interceptors>
+      <interceptor name="web.Interceptor.hibernate"/>
+      <interceptor name="web.Interceptor.security"/>
+    </interceptors>
+  </profile>
+  <static>
+    <bundle name="qrcodejs" version="1c78ccd"/>
+  </static>
+</mvc>
