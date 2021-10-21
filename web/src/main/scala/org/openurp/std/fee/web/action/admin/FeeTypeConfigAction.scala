@@ -15,27 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openurp.std.fee.app.model
+package org.openurp.std.fee.web.action.admin
 
-import java.time.LocalDate
+import org.beangle.webmvc.support.action.RestfulAction
+import org.openurp.std.fee.app.model.FeeTypeConfig
 
-import org.beangle.commons.collection.Collections
-import org.beangle.data.model.IntId
-import org.beangle.data.model.pojo.DateRange
-import org.openurp.base.edu.model.Semester
-import org.openurp.std.fee.model.FeeType
+class FeeTypeConfigAction extends RestfulAction[FeeTypeConfig] {
 
-import scala.collection.mutable
-
-class OnlinePaySetting extends IntId with DateRange {
-
-  var semester: Semester = _
-
-  var notice: String = _
-
-  var feeTypes: mutable.Buffer[FeeType] = Collections.newBuffer[FeeType]
-
-  def suitable(feeType: FeeType): Boolean = {
-    feeTypes.contains(feeType) && this.within(LocalDate.now)
-  }
 }

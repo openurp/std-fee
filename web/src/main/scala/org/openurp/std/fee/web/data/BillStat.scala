@@ -15,27 +15,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openurp.std.fee.app.model
+package org.openurp.std.fee.web.data
 
-import java.time.LocalDate
+import org.openurp.base.model.Department
 
-import org.beangle.commons.collection.Collections
-import org.beangle.data.model.IntId
-import org.beangle.data.model.pojo.DateRange
-import org.openurp.base.edu.model.Semester
-import org.openurp.std.fee.model.FeeType
+class BillStat {
 
-import scala.collection.mutable
+  var department: Department = _
 
-class OnlinePaySetting extends IntId with DateRange {
+  var payedCount: Long = _
 
-  var semester: Semester = _
+  var payedValue: Double = _
 
-  var notice: String = _
+  var payCount: Long = _
 
-  var feeTypes: mutable.Buffer[FeeType] = Collections.newBuffer[FeeType]
-
-  def suitable(feeType: FeeType): Boolean = {
-    feeTypes.contains(feeType) && this.within(LocalDate.now)
+  def this(department: Department, payedCount: Long, payedValue: Double  , payCount: Long)= {
+    this()
+    this.department = department
+    this.payedCount = payedCount
+    this.payedValue = payedValue
+    this.payCount = payCount
   }
+
+  def getUnpayCount: Long = payCount - payedCount
+
+  def getPayedRate: Double = payedCount * 1.0 / payCount
+
 }

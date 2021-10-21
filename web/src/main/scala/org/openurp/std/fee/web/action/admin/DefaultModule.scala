@@ -15,27 +15,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openurp.std.fee.app.model
+package org.openurp.std.fee.web.action.admin
 
-import java.time.LocalDate
+import org.beangle.cdi.bind.BindModule
+import org.openurp.std.fee.web.action.helper.StudentUtils
+import org.openurp.std.fee.pay.impl.SufePayServiceImpl
 
-import org.beangle.commons.collection.Collections
-import org.beangle.data.model.IntId
-import org.beangle.data.model.pojo.DateRange
-import org.openurp.base.edu.model.Semester
-import org.openurp.std.fee.model.FeeType
+class DefaultModule extends BindModule {
+  override protected def binding(): Unit = {
+    bind(classOf[BillAction], classOf[BillSearchAction])
+    bind(classOf[OrderAction])
 
-import scala.collection.mutable
+    bind(classOf[OnlinePaySettingAction])
+    bind(classOf[FeeTypeConfigAction])
 
-class OnlinePaySetting extends IntId with DateRange {
+    bind(classOf[BillStatAction])
 
-  var semester: Semester = _
+    bind(classOf[TuitionConfigAction])
+    bind(classOf[SufePayServiceImpl])
 
-  var notice: String = _
-
-  var feeTypes: mutable.Buffer[FeeType] = Collections.newBuffer[FeeType]
-
-  def suitable(feeType: FeeType): Boolean = {
-    feeTypes.contains(feeType) && this.within(LocalDate.now)
+    bind( classOf[StudentUtils] )
   }
 }
