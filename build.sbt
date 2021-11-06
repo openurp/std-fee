@@ -21,7 +21,7 @@ ThisBuild / developers := List(
   )
 )
 
-ThisBuild / description := "OpenURP Starter"
+ThisBuild / description := "OpenURP Std Fee"
 ThisBuild / homepage := Some(url("http://openurp.github.io/std-fee/index.html"))
 
 val apiVer = "0.23.3"
