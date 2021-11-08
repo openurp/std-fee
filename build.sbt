@@ -3,7 +3,7 @@ import org.openurp.parent.Dependencies._
 import org.beangle.tools.sbt.Sas
 
 ThisBuild / organization := "org.openurp.std.fee"
-ThisBuild / version := "0.0.18"
+ThisBuild / version := "0.0.19"
 
 ThisBuild / scmInfo := Some(
   ScmInfo(
@@ -21,12 +21,12 @@ ThisBuild / developers := List(
   )
 )
 
-ThisBuild / description := "OpenURP Starter"
+ThisBuild / description := "OpenURP Std Fee"
 ThisBuild / homepage := Some(url("http://openurp.github.io/std-fee/index.html"))
 
-val apiVer = "0.23.2"
-val starterVer = "0.0.10"
-val baseVer = "0.1.20"
+val apiVer = "0.23.4"
+val starterVer = "0.0.13"
+val baseVer = "0.1.22"
 val openurp_base_api = "org.openurp.base" % "openurp-base-api" % apiVer
 val openurp_std_api = "org.openurp.std" % "openurp-std-api" % apiVer
 val openurp_stater_web = "org.openurp.starter" % "openurp-starter-web" % starterVer
