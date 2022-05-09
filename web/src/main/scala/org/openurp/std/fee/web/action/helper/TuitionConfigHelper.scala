@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005, The OpenURP Software.
+ * Copyright (C) 2014, The OpenURP Software.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -18,7 +18,7 @@
 package org.openurp.std.fee.web.action.helper
 
 import org.beangle.commons.collection.Collections
-import org.openurp.base.edu.model.StudentState
+import org.openurp.base.std.model.StudentState
 import org.openurp.std.fee.model.TuitionConfig
 
 import scala.collection.mutable
@@ -26,23 +26,22 @@ import scala.collection.mutable.ArrayBuffer
 
 class TuitionConfigHelper(configs: collection.Seq[TuitionConfig]) {
 
-  private val wildcards = Collections.newMap[String, mutable.Buffer[TuitionConfig]]
+  val feeType = configs.headOption.map(_.feeType).orNull
 
   configs.foreach { cfg =>
-    val key = cfg.level.id + "_" + (cfg.duration*10).toInt + "_" + cfg.major.map(_.id.toString).getOrElse("*") + "_" +
+    val key = cfg.level.id.toString + "_" + (cfg.duration * 10).toInt + "_" + cfg.major.map(_.id.toString).getOrElse("*") + "_" +
       cfg.direction.map(_.id.toString).getOrElse("*") + "_" + cfg.department.map(_.id.toString).getOrElse("*")
     wildcards.getOrElseUpdate(key, new ArrayBuffer[TuitionConfig]) += cfg
   }
-
-  val feeType = configs.headOption.map(_.feeType).orNull
+  private val wildcards = Collections.newMap[String, mutable.Buffer[TuitionConfig]]
 
   def find(ss: StudentState): Option[TuitionConfig] = {
     val directionId = ss.direction.map(_.id.toString).getOrElse("*")
-    val prefix = ss.std.level.id + "_" + (ss.std.duration*10).toInt + "_"
-    val first = prefix  + ss.major.id + "_" + directionId + "_" + ss.department.id
+    val prefix = ss.std.level.id.toString + "_" + (ss.std.duration * 10).toInt + "_"
+    val first = prefix + ss.major.id + "_" + directionId + "_" + ss.department.id
     val ignoreDirection = prefix + ss.major.id + "_*_" + ss.department.id
     val ignoreDepart = prefix + ss.major.id + "_" + directionId + "_*"
-    val ignoreDepartDirection = prefix   + ss.major.id + "_*_*"
+    val ignoreDepartDirection = prefix + ss.major.id + "_*_*"
     val ignoreMajor = prefix + "*_*_*"
     val patterns = List(first, ignoreDirection, ignoreDepart, ignoreDepartDirection, ignoreMajor)
     patterns.find(wildcards.contains(_)) match {

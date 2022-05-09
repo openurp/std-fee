@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005, The OpenURP Software.
+ * Copyright (C) 2014, The OpenURP Software.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -22,7 +22,7 @@ import java.time.LocalDate
 import org.beangle.commons.collection.Collections
 import org.beangle.data.model.IntId
 import org.beangle.data.model.pojo.DateRange
-import org.openurp.base.edu.model.Semester
+import org.openurp.base.model.Semester
 import org.openurp.std.fee.model.FeeType
 
 import scala.collection.mutable
