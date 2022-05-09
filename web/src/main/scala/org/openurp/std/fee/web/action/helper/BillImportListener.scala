@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005, The OpenURP Software.
+ * Copyright (C) 2014, The OpenURP Software.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -17,13 +17,14 @@
 
 package org.openurp.std.fee.web.action.helper
 
-import java.time.Instant
-
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.data.transfer.importer.{ImportListener, ImportResult}
 import org.beangle.security.Securities
-import org.openurp.base.edu.model.{Project, Student}
+import org.openurp.base.model.Project
+import org.openurp.base.std.model.Student
 import org.openurp.std.fee.model.Bill
+
+import java.time.Instant
 
 class BillImportListener(project: Project, entityDao: EntityDao) extends ImportListener {
   override def onStart(tr: ImportResult): Unit = {}
@@ -42,7 +43,7 @@ class BillImportListener(project: Project, entityDao: EntityDao) extends ImportL
         tr.addFailure("不存在的学号", stdCode)
       } else {
         data.put("bill.std", stds.head)
-        if(data.get("new").isEmpty){
+        if (data.get("new").isEmpty) {
           val query = OqlBuilder.from(classOf[Bill], "t")
             .where("t.std=:std", stds.head)
             .where("t.feeType.name=:feeTypeName", feeTypeName.toString)
@@ -54,8 +55,8 @@ class BillImportListener(project: Project, entityDao: EntityDao) extends ImportL
         }
       }
     }
-    data.get("bill.payed") foreach {payed=>
-      data.put("bill.payed",payed.asInstanceOf[Number].floatValue() * 100)
+    data.get("bill.payed") foreach { payed =>
+      data.put("bill.payed", payed.asInstanceOf[Number].floatValue() * 100)
     }
     data.put("bill.amount", data("bill.amount").asInstanceOf[Number].floatValue() * 100)
   }
@@ -65,8 +66,8 @@ class BillImportListener(project: Project, entityDao: EntityDao) extends ImportL
     bill.depart = bill.std.state.get.department
     bill.updatedAt = Instant.now
     bill.updatedBy = Securities.user
-    if(!bill.persisted){
-      bill.createdAt=Instant.now
+    if (!bill.persisted) {
+      bill.createdAt = Instant.now
     }
     entityDao.saveOrUpdate(bill)
   }

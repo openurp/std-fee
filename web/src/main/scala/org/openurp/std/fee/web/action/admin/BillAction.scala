@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005, The OpenURP Software.
+ * Copyright (C) 2014, The OpenURP Software.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -19,18 +19,19 @@ package org.openurp.std.fee.web.action.admin
 
 import org.beangle.commons.collection.Collections
 import org.beangle.data.dao.OqlBuilder
-import org.beangle.doc.excel.schema.ExcelSchema
+import org.beangle.data.excel.schema.ExcelSchema
 import org.beangle.data.transfer.importer.ImportSetting
 import org.beangle.data.transfer.importer.listener.ForeignerListener
 import org.beangle.security.Securities
 import org.beangle.web.action.annotation.response
 import org.beangle.web.action.view.{Stream, View}
 import org.beangle.webmvc.support.action.RestfulAction
-import org.openurp.base.edu.model.{Semester, Student, StudentState}
+import org.openurp.base.model.Semester
+import org.openurp.base.std.model.{Student, StudentState}
 import org.openurp.code.edu.model.EducationLevel
 import org.openurp.starter.edu.helper.ProjectSupport
-import org.openurp.std.fee.web.action.helper.{BillImportListener, StudentUtils, TuitionConfigHelper}
 import org.openurp.std.fee.model.{Bill, FeeType, TuitionConfig}
+import org.openurp.std.fee.web.action.helper.{BillImportListener, StudentUtils, TuitionConfigHelper}
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 import java.time.Instant
@@ -47,33 +48,10 @@ class BillAction extends RestfulAction[Bill] with ProjectSupport {
     super.indexSetting()
   }
 
-  override protected def getQueryBuilder: OqlBuilder[Bill] = {
-    val query = super.getQueryBuilder
-    getBoolean("paid") foreach { payed =>
-      if (payed) {
-        query.where("bill.payed > 0")
-      } else {
-        query.where("bill.payed <= 0")
-      }
-    }
-    getBoolean("student_inschool") foreach { inschool =>
-      query.where("bill.std.state.inschool=:inschool", inschool)
-    }
-    query
-  }
-
   def initIndex(): View = {
     put("semester", entityDao.get(classOf[Semester], intId("bill.semester")))
     put("departments", getDeparts)
     forward()
-  }
-
-  def getFirstSemesterInCurrentYear(semesterId: Int): Semester = {
-    val semester = entityDao.get(classOf[Semester], semesterId)
-    val builder = OqlBuilder.from(classOf[Semester], "semester")
-    builder.where("semester.schoolYear=:schoolYear", semester.schoolYear)
-    builder.orderBy("semester.beginOn")
-    entityDao.search(builder).head
   }
 
   def toInitStudentList(): View = {
@@ -153,21 +131,6 @@ class BillAction extends RestfulAction[Bill] with ProjectSupport {
     forward()
   }
 
-  private def getConfigHelper(semester: Semester): TuitionConfigHelper = {
-    // 根据上面找出的学生学籍状态，找到对应匹配到的默认收费标准
-    val builder4 = OqlBuilder.from(classOf[TuitionConfig], "tuitionConfig")
-    val hql = new StringBuilder()
-    hql.append("exists (")
-    hql.append("  from ").append(classOf[StudentState].getName).append(" studentState")
-    hql.append(" where studentState.std.level = tuitionConfig.level")
-    hql.append("   and studentState.inschool = true")
-    hql.append("   and studentState.beginOn <= :endOn")
-    hql.append("   and studentState.endOn >= :beginOn")
-    hql.append(")")
-    builder4.where(hql.toString, semester.endOn, semester.beginOn)
-    new TuitionConfigHelper(entityDao.search(builder4))
-  }
-
   def billInit(): View = {
     val students = entityDao.find(classOf[Student], longIds("student"))
     val semester = getFirstSemesterInCurrentYear(intId("bill.semester"))
@@ -193,17 +156,34 @@ class BillAction extends RestfulAction[Bill] with ProjectSupport {
     redirect("toInitStudentList", "初始化成功")
   }
 
+  def getFirstSemesterInCurrentYear(semesterId: Int): Semester = {
+    val semester = entityDao.get(classOf[Semester], semesterId)
+    val builder = OqlBuilder.from(classOf[Semester], "semester")
+    builder.where("semester.schoolYear=:schoolYear", semester.schoolYear)
+    builder.orderBy("semester.beginOn")
+    entityDao.search(builder).head
+  }
+
+  private def getConfigHelper(semester: Semester): TuitionConfigHelper = {
+    // 根据上面找出的学生学籍状态，找到对应匹配到的默认收费标准
+    val builder4 = OqlBuilder.from(classOf[TuitionConfig], "tuitionConfig")
+    val hql = new StringBuilder()
+    hql.append("exists (")
+    hql.append("  from ").append(classOf[StudentState].getName).append(" studentState")
+    hql.append(" where studentState.std.level = tuitionConfig.level")
+    hql.append("   and studentState.inschool = true")
+    hql.append("   and studentState.beginOn <= :endOn")
+    hql.append("   and studentState.endOn >= :beginOn")
+    hql.append(")")
+    builder4.where(hql.toString, semester.endOn, semester.beginOn)
+    new TuitionConfigHelper(entityDao.search(builder4))
+  }
+
   def loadStdAjax: View = {
     val students = entityDao.search(OqlBuilder.from(classOf[Student], "s").where("s.project.id=:projectId and s.user.code = :code", getProject.id, get("code")))
     val std = if (students.isEmpty) null else students.head
     put("std", std)
     forward()
-  }
-
-  override protected def saveAndRedirect(bill: Bill): View = {
-    bill.std.id = longId("bill.std")
-    bill.updatedBy = Securities.user
-    super.saveAndRedirect(bill)
   }
 
   @response
@@ -227,6 +207,27 @@ class BillAction extends RestfulAction[Bill] with ProjectSupport {
     val os = new ByteArrayOutputStream()
     schema.generate(os)
     Stream(new ByteArrayInputStream(os.toByteArray), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "收费信息.xlsx")
+  }
+
+  override protected def getQueryBuilder: OqlBuilder[Bill] = {
+    val query = super.getQueryBuilder
+    getBoolean("paid") foreach { payed =>
+      if (payed) {
+        query.where("bill.payed > 0")
+      } else {
+        query.where("bill.payed <= 0")
+      }
+    }
+    getBoolean("student_inschool") foreach { inschool =>
+      query.where("bill.std.state.inschool=:inschool", inschool)
+    }
+    query
+  }
+
+  override protected def saveAndRedirect(bill: Bill): View = {
+    bill.std.id = longId("bill.std")
+    bill.updatedBy = Securities.user
+    super.saveAndRedirect(bill)
   }
 
   protected override def configImport(setting: ImportSetting): Unit = {

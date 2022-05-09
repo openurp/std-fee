@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005, The OpenURP Software.
+ * Copyright (C) 2014, The OpenURP Software.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -21,7 +21,7 @@ import org.beangle.data.dao.OqlBuilder
 import org.beangle.web.action.annotation.{mapping, param}
 import org.beangle.web.action.view.{Status, View}
 import org.beangle.webmvc.support.action.EntityAction
-import org.openurp.base.edu.model.Student
+import org.openurp.base.std.model.Student
 import org.openurp.starter.edu.helper.ProjectSupport
 import org.openurp.std.fee.app.model.OnlinePaySetting
 import org.openurp.std.fee.model.{Bill, Order}
@@ -43,7 +43,7 @@ class BillAction extends EntityAction[Bill] with ProjectSupport {
 
     val orderQuery = OqlBuilder.from(classOf[Order], "o")
     orderQuery.where("o.std=:std", std)
-    val orders = entityDao.search(orderQuery).map(x=> x.bill.id-> x).toMap
+    val orders = entityDao.search(orderQuery).map(x => x.bill.id -> x).toMap
     put("orders", orders)
 
     val settingQuery = OqlBuilder.from(classOf[OnlinePaySetting], "s")
@@ -99,18 +99,17 @@ class BillAction extends EntityAction[Bill] with ProjectSupport {
     forward("pay")
   }
 
-
   @mapping(value = "displayInvoice/{id}")
   def displayInvoice(id: String): View = {
     val order = entityDao.get(classOf[Order], id.toLong)
     val std = getUser(classOf[Student])
-    if(order.std != std) return Status.NotFound
+    if (order.std != std) return Status.NotFound
 
     payService.getInvoiceUrl(order) match {
       case (Some(p), _) => put("invoicePath", p)
       case (None, msg) => put("error", msg)
     }
-    put("order",order)
+    put("order", order)
     forward()
   }
 
@@ -118,7 +117,7 @@ class BillAction extends EntityAction[Bill] with ProjectSupport {
   def invoice(id: String): View = {
     val order = entityDao.get(classOf[Order], id.toLong)
     val std = getUser(classOf[Student])
-    if(order.std != std) return Status.NotFound
+    if (order.std != std) return Status.NotFound
     payService.getInvoiceUrl(order) match {
       case (Some(p), _) => redirect(to(p), "download")
       case (None, msg) =>

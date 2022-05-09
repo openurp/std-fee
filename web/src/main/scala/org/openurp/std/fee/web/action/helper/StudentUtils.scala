@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005, The OpenURP Software.
+ * Copyright (C) 2014, The OpenURP Software.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -18,7 +18,8 @@
 package org.openurp.std.fee.web.action.helper
 
 import org.beangle.commons.collection.Collections
-import org.openurp.base.edu.model.{Semester, Student, StudentState}
+import org.openurp.base.model.Semester
+import org.openurp.base.std.model.{Student, StudentState}
 
 import java.time.LocalDate
 import scala.collection.mutable
