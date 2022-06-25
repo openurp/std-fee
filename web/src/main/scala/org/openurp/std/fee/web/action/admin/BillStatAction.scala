@@ -22,9 +22,10 @@ import org.beangle.data.dao.OqlBuilder
 import org.beangle.web.action.view.View
 import org.beangle.webmvc.support.action.RestfulAction
 import org.openurp.base.model.Semester
+import org.openurp.base.std.code.FeeType
 import org.openurp.starter.edu.helper.ProjectSupport
+import org.openurp.std.fee.model.Bill
 import org.openurp.std.fee.web.data.BillStat
-import org.openurp.std.fee.model.{Bill, FeeType}
 
 class BillStatAction extends RestfulAction[Bill] with ProjectSupport {
 
@@ -37,6 +38,7 @@ class BillStatAction extends RestfulAction[Bill] with ProjectSupport {
 
   /**
    * “学费收缴情况说明”统计
+   *
    * @return
    */
   override def search(): View = {

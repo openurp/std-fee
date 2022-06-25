@@ -20,10 +20,11 @@ package org.openurp.std.fee.web.action.admin
 import org.beangle.data.dao.OqlBuilder
 import org.beangle.web.action.view.View
 import org.beangle.webmvc.support.action.RestfulAction
-import org.openurp.code.edu.model.EducationLevel
 import org.openurp.base.edu.model.{Direction, Major}
+import org.openurp.base.std.code.FeeType
+import org.openurp.code.edu.model.EducationLevel
 import org.openurp.starter.edu.helper.ProjectSupport
-import org.openurp.std.fee.model.{FeeType, TuitionConfig}
+import org.openurp.std.fee.config.TuitionConfig
 
 class TuitionConfigAction extends RestfulAction[TuitionConfig] with ProjectSupport {
 

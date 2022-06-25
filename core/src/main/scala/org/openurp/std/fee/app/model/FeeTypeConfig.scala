@@ -18,7 +18,7 @@
 package org.openurp.std.fee.app.model
 
 import org.beangle.data.model.IntId
-import org.openurp.std.fee.model.FeeType
+import org.openurp.base.std.code.FeeType
 
 class FeeTypeConfig extends IntId {
 
