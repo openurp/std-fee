@@ -19,7 +19,7 @@ package org.openurp.std.fee.web.action.helper
 
 import org.beangle.commons.collection.Collections
 import org.openurp.base.std.model.StudentState
-import org.openurp.std.fee.model.TuitionConfig
+import org.openurp.std.fee.config.TuitionConfig
 
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer

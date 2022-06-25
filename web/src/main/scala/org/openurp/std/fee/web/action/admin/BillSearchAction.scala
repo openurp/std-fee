@@ -19,9 +19,10 @@ package org.openurp.std.fee.web.action.admin
 
 import org.beangle.data.dao.OqlBuilder
 import org.beangle.webmvc.support.action.RestfulAction
+import org.openurp.base.std.code.FeeType
 import org.openurp.code.edu.model.EducationLevel
 import org.openurp.starter.edu.helper.ProjectSupport
-import org.openurp.std.fee.model.{Bill, FeeType}
+import org.openurp.std.fee.model.Bill
 
 class BillSearchAction extends RestfulAction[Bill] with ProjectSupport {
 
@@ -29,7 +30,7 @@ class BillSearchAction extends RestfulAction[Bill] with ProjectSupport {
     put("feeTypes", getCodes(classOf[FeeType]))
     put("levels", getCodes(classOf[EducationLevel]))
     put("currentSemester", getCurrentSemester)
-    put("project",getProject)
+    put("project", getProject)
   }
 
   override protected def getQueryBuilder: OqlBuilder[Bill] = {
@@ -42,7 +43,7 @@ class BillSearchAction extends RestfulAction[Bill] with ProjectSupport {
       }
     }
     getBoolean("student_inschool") foreach { inschool =>
-      query.where("bill.std.state.inschool=:inschool",inschool)
+      query.where("bill.std.state.inschool=:inschool", inschool)
     }
     query
   }

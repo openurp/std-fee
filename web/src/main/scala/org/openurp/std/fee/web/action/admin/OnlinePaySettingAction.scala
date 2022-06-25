@@ -21,7 +21,7 @@ import org.beangle.web.action.view.View
 import org.beangle.webmvc.support.action.RestfulAction
 import org.openurp.starter.edu.helper.ProjectSupport
 import org.openurp.std.fee.app.model.OnlinePaySetting
-import org.openurp.std.fee.model.FeeType
+import org.openurp.base.std.code.FeeType
 
 class OnlinePaySettingAction extends RestfulAction[OnlinePaySetting] with ProjectSupport {
 
