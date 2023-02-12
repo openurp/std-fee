@@ -4,9 +4,9 @@
 <table class="infoTable" style="width:90%;margin:10px auto auto;">
   <tr>
     <td class="title" width="20%">学号：</td>
-    <td class="content" width="30%">${bill.std.user.code}</td>
+    <td class="content" width="30%">${bill.std.code}</td>
     <td class="title" width="20%">姓名：</td>
-    <td class="content"  width="30%">${bill.std.user.code}</td>
+    <td class="content"  width="30%">${bill.std.name}</td>
   </tr>
   <tr>
     <td class="title">学生类别：</td>

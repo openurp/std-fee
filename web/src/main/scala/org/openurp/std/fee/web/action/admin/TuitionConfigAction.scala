@@ -21,14 +21,17 @@ import org.beangle.data.dao.OqlBuilder
 import org.beangle.web.action.view.View
 import org.beangle.webmvc.support.action.RestfulAction
 import org.openurp.base.edu.model.{Direction, Major}
+import org.openurp.base.model.Project
 import org.openurp.base.std.code.FeeType
 import org.openurp.code.edu.model.EducationLevel
-import org.openurp.starter.edu.helper.ProjectSupport
+import org.openurp.starter.web.support.ProjectSupport
 import org.openurp.std.fee.config.TuitionConfig
 
 class TuitionConfigAction extends RestfulAction[TuitionConfig] with ProjectSupport {
 
   override def indexSetting(): Unit = {
+    given project: Project = getProject
+
     put("levels", getCodes(classOf[EducationLevel]))
     put("departments", getDeparts)
     put("majors", findInProject(classOf[Major]))
@@ -36,6 +39,8 @@ class TuitionConfigAction extends RestfulAction[TuitionConfig] with ProjectSuppo
   }
 
   override def editSetting(entity: TuitionConfig): Unit = {
+    given project: Project = getProject
+
     put("feeTypes", getCodes(classOf[FeeType]))
     put("levels", getCodes(classOf[EducationLevel]))
     put("departments", getDeparts)
@@ -49,7 +54,7 @@ class TuitionConfigAction extends RestfulAction[TuitionConfig] with ProjectSuppo
    *
    * @return
    */
-  def printReview: View = {
+  def printReview(): View = {
     put("tuitionConfigs", entityDao.search(OqlBuilder.from(classOf[TuitionConfig], "feeDefault")))
     forward()
   }

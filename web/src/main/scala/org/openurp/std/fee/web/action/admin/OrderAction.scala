@@ -20,9 +20,10 @@ package org.openurp.std.fee.web.action.admin
 import org.beangle.web.action.annotation.mapping
 import org.beangle.web.action.view.View
 import org.beangle.webmvc.support.action.RestfulAction
+import org.openurp.base.model.Project
 import org.openurp.base.std.code.FeeType
 import org.openurp.code.edu.model.EducationLevel
-import org.openurp.starter.edu.helper.ProjectSupport
+import org.openurp.starter.web.support.ProjectSupport
 import org.openurp.std.fee.model.Order
 import org.openurp.std.fee.pay.PayService
 
@@ -31,6 +32,8 @@ class OrderAction extends RestfulAction[Order] with ProjectSupport {
   var payService: PayService = _
 
   override protected def indexSetting(): Unit = {
+    given project: Project = getProject
+
     put("feeTypes", getCodes(classOf[FeeType]))
     put("levels", getCodes(classOf[EducationLevel]))
   }
@@ -57,7 +60,7 @@ class OrderAction extends RestfulAction[Order] with ProjectSupport {
       case (Some(p), _) => put("invoicePath", p)
       case (None, msg) => put("error", msg)
     }
-    put("order",order)
+    put("order", order)
     forward()
   }
 

@@ -19,18 +19,21 @@ package org.openurp.std.fee.web.action.admin
 
 import org.beangle.data.dao.OqlBuilder
 import org.beangle.webmvc.support.action.RestfulAction
+import org.openurp.base.model.Project
 import org.openurp.base.std.code.FeeType
 import org.openurp.code.edu.model.EducationLevel
-import org.openurp.starter.edu.helper.ProjectSupport
+import org.openurp.starter.web.support.ProjectSupport
 import org.openurp.std.fee.model.Bill
 
 class BillSearchAction extends RestfulAction[Bill] with ProjectSupport {
 
   override def indexSetting(): Unit = {
+    given project: Project = getProject
+
     put("feeTypes", getCodes(classOf[FeeType]))
     put("levels", getCodes(classOf[EducationLevel]))
-    put("currentSemester", getCurrentSemester)
-    put("project", getProject)
+    put("currentSemester", getSemester)
+    put("project", project)
   }
 
   override protected def getQueryBuilder: OqlBuilder[Bill] = {

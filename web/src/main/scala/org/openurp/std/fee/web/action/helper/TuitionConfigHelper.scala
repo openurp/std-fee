@@ -47,7 +47,7 @@ class TuitionConfigHelper(configs: collection.Seq[TuitionConfig]) {
     patterns.find(wildcards.contains(_)) match {
       case Some(k) =>
         wildcards(k).find { m =>
-          ss.grade.compareTo(m.fromGrade) >= 0 && ss.grade.compareTo(m.toGrade) <= 0
+          ss.grade.code.compareTo(m.fromGrade.code) >= 0 && ss.grade.code.compareTo(m.toGrade.code) <= 0
         }
       case None => None
     }

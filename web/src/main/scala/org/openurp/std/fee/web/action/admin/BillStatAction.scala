@@ -21,17 +21,19 @@ import org.beangle.commons.collection.{Collections, Order}
 import org.beangle.data.dao.OqlBuilder
 import org.beangle.web.action.view.View
 import org.beangle.webmvc.support.action.RestfulAction
-import org.openurp.base.model.Semester
+import org.openurp.base.model.{Project, Semester}
 import org.openurp.base.std.code.FeeType
-import org.openurp.starter.edu.helper.ProjectSupport
+import org.openurp.starter.web.support.ProjectSupport
 import org.openurp.std.fee.model.Bill
 import org.openurp.std.fee.web.data.BillStat
 
 class BillStatAction extends RestfulAction[Bill] with ProjectSupport {
 
   override def indexSetting(): Unit = {
+    given project: Project = getProject
+
     put("feeTypes", getCodes(classOf[FeeType]))
-    put("currentSemester", getCurrentSemester)
+    put("currentSemester", getSemester)
     put("project", getProject)
     super.indexSetting()
   }
@@ -42,16 +44,20 @@ class BillStatAction extends RestfulAction[Bill] with ProjectSupport {
    * @return
    */
   override def search(): View = {
+    given project: Project = getProject
+
     val departmentMap = getDeparts.map(t => (t.id, t)).toMap
     val builder = OqlBuilder.from(classOf[Bill].getName + " bill")
     builder.where("bill.semester.id =:semesterId", intId("semester"))
     builder.where("bill.feeType.id =:typeId", intId("feeType"))
     builder.groupBy("bill.std.state.department.id")
-    builder.select("bill.std.state.department.id,sum(case when bill.payed is not null and bill.payed > 0 then 1 else 0 end),sum(case when bill.payed is not null or bill.payed > 0 then bill.payed else 0 end)/100.0,count(*)")
+    builder.select("bill.std.state.department.id,sum(case when bill.payed is not null and bill.payed > 0 then 1 else 0 end)," +
+      "sum(case when bill.payed is not null or bill.payed > 0 then bill.payed else 0 end)/100.0,count(*)")
     val stats: Seq[Array[Any]] = entityDao.search(builder)
     val results = Collections.newBuffer[BillStat]
     stats.foreach(data => {
-      results.addOne(new BillStat(departmentMap.apply(data(0).asInstanceOf[Int]), data(1).asInstanceOf[Long], data(2).asInstanceOf[Double], data(3).asInstanceOf[Long]))
+      results.addOne(new BillStat(departmentMap.apply(data(0).asInstanceOf[Int]), data(1).asInstanceOf[Long],
+        data(2).asInstanceOf[Number], data(3).asInstanceOf[Long]))
     })
     put("results", results)
     put("feeTypeId", intId("feeType"))
@@ -59,9 +65,11 @@ class BillStatAction extends RestfulAction[Bill] with ProjectSupport {
     forward()
   }
 
-  def detail: View = {
+  def detail(): View = {
+    given project: Project = getProject
+
     val builder = OqlBuilder.from(classOf[Bill], "bill")
-    builder.where("bill.std.project in (:project)", getProject)
+    builder.where("bill.std.project in (:project)", project)
     builder.where("bill.std.state.department in (:departs)", getDeparts)
     builder.where("bill.feeType.id =:typeId", intId("feeType"))
     val spans = getProject.levels

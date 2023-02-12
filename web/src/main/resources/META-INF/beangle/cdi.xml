@@ -3,6 +3,6 @@
   <container>
     <module class="org.openurp.std.fee.web.action.admin.DefaultModule"/>
     <module class="org.openurp.std.fee.web.action.std.DefaultModule"/>
-    <module class="org.openurp.starter.edu.action.ProjectModule" />
+    <module class="org.openurp.starter.web.ProjectModule"/>
   </container>
 </cdi>

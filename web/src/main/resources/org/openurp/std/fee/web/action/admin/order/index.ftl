@@ -13,7 +13,7 @@
   <div class="search-container">
       <div class="search-panel">
         [@b.form title="ui.searchForm" name="orderSearchForm" action="!search" target="orders" theme="search"]
-          [@b.textfields names="o.std.user.code;学号,o.std.user.name;姓名"/]
+          [@b.textfields names="o.std.code;学号,o.std.name;姓名"/]
           [@b.select label="学历层次" items=levels?sort_by("code") empty="..."  name="o.std.level.id"/]
           [@b.select label="收费类型" items=feeTypes?sort_by("code") empty="..."  name="o.bill.feeType.id"/]
           [@b.select label="缴费状态" items={"1":"已缴","0":"未缴"} empty="..."  name="o.paid"/]
@@ -26,7 +26,7 @@
   <script>
     $(function() {
       $(document).ready(function() {
-        bg.form.submit(document.orderSearchForm, "${b.url("!search?orderBy=o.std.user.code")}", "orders");
+        bg.form.submit(document.orderSearchForm, "${b.url("!search?orderBy=o.std.code")}", "orders");
       });
     });
   </script>

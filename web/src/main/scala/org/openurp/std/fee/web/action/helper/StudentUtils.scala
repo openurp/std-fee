@@ -39,7 +39,7 @@ class StudentUtils {
     val studentStates = Collections.newBuffer[StudentState]
     if (student != null && fromAt != null) {
       student.states.foreach(state => {
-        if ((null == toAt || state.beginOn.isBefore(toAt)) && state.endOn.get.isAfter(fromAt)) studentStates.addOne(state) //endOn.get注意
+        if ((null == toAt || state.beginOn.isBefore(toAt)) && state.endOn.isAfter(fromAt)) studentStates.addOne(state)
       })
     }
     studentStates

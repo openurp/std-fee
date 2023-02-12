@@ -8,19 +8,19 @@
       bar.addItem("${b.text("action.delete")}",action.remove());
       bar.addItem("导入",action.method('importForm'));
       bar.addItem("${b.text("action.export")}",action.exportData(
-      "std.user.code:学号,std.user.name:姓名,std.state.grade:年级,std.level.name:学历层次," +
-      "std.person.code:证件号码,std.user.mobile:手机号,"+
+      "std.code:学号,std.name:姓名,std.state.grade:年级,std.level.name:学历层次," +
+      "std.person.code:证件号码,"+
       "std.state.department.name:院系,std.state.major.name:专业,std.state.squad.name:班级,std.state.status.name:学籍状态," +
       "semester.code:学年学期,feeType.name:收费类型,amount:应缴(分),payed:实缴(分),payAt:缴费时间",null,'fileName=缴费信息'));
     [/@]
     [@b.row]
       [@b.boxcol/]
-      [@b.col title="学号" property="std.user.code" width="10%"/]
-      [@b.col title="姓名" property="std.user.name" width="9%"]${bill.std.user.name}[#if (Parameters['student_inschool']!'-')=='0']<sup>${bill.std.state.status.name}</sup>[/#if][/@]
+      [@b.col title="学号" property="std.code" width="10%"/]
+      [@b.col title="姓名" property="std.name" width="9%"]${bill.std.name}[#if (Parameters['student_inschool']!'-')=='0']<sup>${bill.std.state.status.name}</sup>[/#if][/@]
       [@b.col title="年级" property="std.state.grade" width="6%"/]
       [@b.col title="学历层次" property="std.level.name" width="6%"/]
       [@b.col title="院系" property="std.state.department.name" width="9%" ]${bill.std.state.department.shortName!bill.std.state.department.name}[/@]
-      [@b.col title="专业" property="std.state.major.name"  width="19%"]
+      [@b.col title="专业" property="std.state.major.name" ]
         ${bill.std.state.major.name} ${(bill.std.state.direction.name)!}
       [/@]
       [@b.col title="收费类型" property="feeType.name" width="6%"/]

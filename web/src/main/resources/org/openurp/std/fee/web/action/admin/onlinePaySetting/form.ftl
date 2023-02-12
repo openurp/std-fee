@@ -3,7 +3,7 @@
   bar.addBack();
 [/@]
   [@b.form name="settingForm" theme="list" action=b.rest.save(onlinePaySetting) title="支付开关" ]
-    [@urp_base.semester name="onlinePaySetting.semester.id" label="学年学期"  value=(onlinePaySetting.semester)! required="true"/]
+    [@base.semester name="onlinePaySetting.semester.id" label="学年学期"  value=(onlinePaySetting.semester)! required="true"/]
     [@b.startend label="缴费日期区间" start=onlinePaySetting.beginOn! end=onlinePaySetting.endOn! name="onlinePaySetting.beginOn,onlinePaySetting.endOn" required="true,true"/]
     [@b.select2 label="开放缴费类型" items2nd=onlinePaySetting.feeTypes name2nd="selectTypeId" name1st="allTypeId" items1st=feeTypes/]
     [@b.textarea label="缴费说明" name="onlinePaySetting.notice" cols="90" rows="10" required="true" maxlength="1000" value=onlinePaySetting.notice! comment="600字以内"/]

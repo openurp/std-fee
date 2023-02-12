@@ -19,13 +19,16 @@ package org.openurp.std.fee.web.action.admin
 
 import org.beangle.web.action.view.View
 import org.beangle.webmvc.support.action.RestfulAction
-import org.openurp.starter.edu.helper.ProjectSupport
+import org.openurp.base.model.Project
+import org.openurp.starter.web.support.ProjectSupport
 import org.openurp.std.fee.app.model.OnlinePaySetting
 import org.openurp.base.std.code.FeeType
 
 class OnlinePaySettingAction extends RestfulAction[OnlinePaySetting] with ProjectSupport {
 
   override protected def editSetting(entity: OnlinePaySetting): Unit = {
+    given project: Project = getProject
+
     val feeTypes = getCodes(classOf[FeeType]).toBuffer
     put("feeTypes", feeTypes.subtractAll(entity.feeTypes))
     put("project",getProject)

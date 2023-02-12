@@ -29,11 +29,11 @@ class BillStat {
 
   var payCount: Long = _
 
-  def this(department: Department, payedCount: Long, payedValue: Double  , payCount: Long)= {
+  def this(department: Department, payedCount: Long, payedValue: Number  , payCount: Long)= {
     this()
     this.department = department
     this.payedCount = payedCount
-    this.payedValue = payedValue
+    this.payedValue = payedValue.doubleValue()
     this.payCount = payCount
   }
 

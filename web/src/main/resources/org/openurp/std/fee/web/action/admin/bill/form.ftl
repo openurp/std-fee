@@ -5,9 +5,9 @@
   [/@]
   [@b.form name="billForm" theme="list" action=b.rest.save(bill) target="bills" ]
     [#assign elementSTYLE = "width: 200px"/]
-    [@b.field label="学号"]${bill.std.user.code}[/@]
+    [@b.field label="学号"]${bill.std.code}[/@]
     <input type="hidden" name="bill.std.id" value="${bill.std.id}"/>
-    [@b.field label="姓名"]<span id="fd_stdName" style="display: inline-block;">${(bill.std.user.name)!}</span>[/@]
+    [@b.field label="姓名"]<span id="fd_stdName" style="display: inline-block;">${(bill.std.name)!}</span>[/@]
     [@b.field label="专业"]<span id="fd_major" style="display: inline-block;">${(bill.std.state.major.name)!}</span>[/@]
     [@b.field label="班级"]<span id="fd_squad" style="display: inline-block;">${(bill.std.state.squad.name)!}</span>[/@]
     [@b.field label="学历层次"]<span id="fd_level" style="display: inline-block;">${(bill.std.level.name)!}</span>[/@]

@@ -28,6 +28,7 @@ import org.beangle.commons.logging.Logging
 import org.beangle.commons.net.http.{HttpUtils, Https}
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.ems.app.EmsApp
+import org.openurp.base.model.User
 import org.openurp.std.fee.app.model.FeeTypeConfig
 import org.openurp.std.fee.model.{Bill, Order}
 import org.openurp.std.fee.pay.impl.SufePayServiceImpl.getInvoice
@@ -37,7 +38,7 @@ import java.io.{File, FileInputStream, OutputStreamWriter}
 import java.net.{HttpURLConnection, URL}
 import java.time.format.DateTimeFormatter
 import java.time.{Duration, Instant, LocalDateTime, ZoneId}
-import java.{util => ju}
+import java.util as ju
 
 object SufePayServiceImpl {
   def getInvoice(orderNo: String, systemCode: String, systemKey: String): Tuple2[String, String] = {
@@ -110,9 +111,10 @@ class SufePayServiceImpl extends PayService with Logging with Initializing {
             os.write(bytes)
             os.close()
             val repo = EmsApp.getBlobRepository(true)
-            val u = order.bill.std.user
+            val std = order.bill.std
             try {
-              val meta = repo.upload("/invoice/" + order.payAt.get.atZone(ZoneId.systemDefault()).getYear, new FileInputStream(f), order.code + ".png", u.code + " " + u.name)
+              val meta = repo.upload("/invoice/" + order.payAt.get.atZone(ZoneId.systemDefault()).getYear,
+                new FileInputStream(f), order.code + ".png", std.code + " " + std.name)
               order.invoicePath = Some(meta.filePath)
               entityDao.saveOrUpdate(order)
               f.delete()
@@ -190,7 +192,8 @@ class SufePayServiceImpl extends PayService with Logging with Initializing {
 
   protected[impl] def createOrder(bill: Bill, params: Map[String, String]): Order = {
     val std = bill.std
-    val inputs = Map("inputIdNo" -> std.person.code, "inputStuNo" -> std.user.code, "inputStuName" -> std.user.name, "inputPhone" -> std.user.mobile.getOrElse("--"))
+    val user = entityDao.findBy(classOf[User],"school"-> std.project.school,"code"->  std.code).head
+    val inputs = Map("inputIdNo" -> std.person.code, "inputStuNo" -> std.code, "inputStuName" -> std.name, "inputPhone" -> user.mobile.getOrElse("--"))
     val order = createOrder(clients(bill.feeType.id), bill.amount, inputs)
     order.bill = bill
     order.std = bill.std

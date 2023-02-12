@@ -26,11 +26,11 @@ import org.beangle.security.Securities
 import org.beangle.web.action.annotation.response
 import org.beangle.web.action.view.{Stream, View}
 import org.beangle.webmvc.support.action.RestfulAction
-import org.openurp.base.model.Semester
+import org.openurp.base.model.{Project, Semester}
 import org.openurp.base.std.code.FeeType
 import org.openurp.base.std.model.{Student, StudentState}
 import org.openurp.code.edu.model.EducationLevel
-import org.openurp.starter.edu.helper.ProjectSupport
+import org.openurp.starter.web.support.ProjectSupport
 import org.openurp.std.fee.config.TuitionConfig
 import org.openurp.std.fee.model.Bill
 import org.openurp.std.fee.web.action.helper.{BillImportListener, StudentUtils, TuitionConfigHelper}
@@ -43,14 +43,18 @@ class BillAction extends RestfulAction[Bill] with ProjectSupport {
   var studentUtils: StudentUtils = _
 
   override def indexSetting(): Unit = {
+    given project: Project = getProject
+
     put("feeTypes", getCodes(classOf[FeeType]))
     put("levels", getCodes(classOf[EducationLevel]))
     put("project", getProject)
-    put("currentSemester", getCurrentSemester)
+    put("currentSemester", getSemester)
     super.indexSetting()
   }
 
   def initIndex(): View = {
+    given project: Project = getProject
+
     put("semester", entityDao.get(classOf[Semester], intId("bill.semester")))
     put("departments", getDeparts)
     forward()
@@ -100,7 +104,7 @@ class BillAction extends RestfulAction[Bill] with ProjectSupport {
       // 萃取指定学年学期期间的学生学籍状态
       var currentState = new StudentState()
       student.states.foreach(state => {
-        if (state.beginOn.isBefore(semester.endOn) && state.endOn.get.isAfter(semester.beginOn)) {
+        if (state.beginOn.isBefore(semester.endOn) && state.endOn.isAfter(semester.beginOn)) {
           currentState = state
           currentStateMap.put(student, currentState)
         }
@@ -127,7 +131,7 @@ class BillAction extends RestfulAction[Bill] with ProjectSupport {
         case "" =>
       }
     }
-    put("students", students.sortBy(_.user.code))
+    put("students", students.sortBy(_.code))
     put("currentStateMap", currentStateMap)
     put("stateTuitionConfigMap", stateTuitionConfigMap)
     forward()
@@ -181,7 +185,7 @@ class BillAction extends RestfulAction[Bill] with ProjectSupport {
     new TuitionConfigHelper(entityDao.search(builder4))
   }
 
-  def loadStdAjax: View = {
+  def loadStdAjax(): View = {
     val students = entityDao.search(OqlBuilder.from(classOf[Student], "s").where("s.project.id=:projectId and s.user.code = :code", getProject.id, get("code")))
     val std = if (students.isEmpty) null else students.head
     put("std", std)
@@ -190,6 +194,8 @@ class BillAction extends RestfulAction[Bill] with ProjectSupport {
 
   @response
   def downloadTemplate(): Any = {
+    given project: Project = getProject
+
     val feeTypes = getCodes(classOf[FeeType]).map(_.name)
     val semesters = entityDao.search(OqlBuilder.from(classOf[Semester], "s").orderBy("s.code")).map(_.code)
 
