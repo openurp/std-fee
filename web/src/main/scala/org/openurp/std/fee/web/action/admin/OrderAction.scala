@@ -43,12 +43,10 @@ class OrderAction extends RestfulAction[Order] with ProjectSupport {
   }
 
   def check(): View = {
-    val ids = longIds("o")
+    val ids = getLongIds("o")
     val orders = entityDao.find(classOf[Order], ids)
     orders foreach { order =>
-      if (!order.paid) {
-        payService.refreshBill(order.bill)
-      }
+      if !order.paid then payService.refreshBill(order.bill)
     }
     redirect("search", "info.save.success")
   }

@@ -18,6 +18,7 @@
 package org.openurp.std.fee.web.action.admin
 
 import org.beangle.commons.collection.Collections
+import org.beangle.commons.collection.page.{Page, SinglePage}
 import org.beangle.data.dao.OqlBuilder
 import org.beangle.data.excel.schema.ExcelSchema
 import org.beangle.data.transfer.importer.ImportSetting
@@ -25,7 +26,7 @@ import org.beangle.data.transfer.importer.listener.ForeignerListener
 import org.beangle.security.Securities
 import org.beangle.web.action.annotation.response
 import org.beangle.web.action.view.{Stream, View}
-import org.beangle.webmvc.support.action.RestfulAction
+import org.beangle.webmvc.support.action.{ExportSupport, ImportSupport, RestfulAction}
 import org.openurp.base.model.{Project, Semester}
 import org.openurp.base.std.code.FeeType
 import org.openurp.base.std.model.{Student, StudentState}
@@ -38,7 +39,7 @@ import org.openurp.std.fee.web.action.helper.{BillImportListener, StudentUtils, 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 import java.time.Instant
 
-class BillAction extends RestfulAction[Bill] with ProjectSupport {
+class BillAction extends RestfulAction[Bill], ExportSupport[Bill], ImportSupport[Bill], ProjectSupport {
 
   var studentUtils: StudentUtils = _
 
@@ -55,13 +56,13 @@ class BillAction extends RestfulAction[Bill] with ProjectSupport {
   def initIndex(): View = {
     given project: Project = getProject
 
-    put("semester", entityDao.get(classOf[Semester], intId("bill.semester")))
+    put("semester", entityDao.get(classOf[Semester], getIntId("bill.semester")))
     put("departments", getDeparts)
     forward()
   }
 
   def toInitStudentList(): View = {
-    val semester = getFirstSemesterInCurrentYear(intId("bill.semester"))
+    val semester = getFirstSemesterInCurrentYear(getIntId("bill.semester"))
     val configHelper = getConfigHelper(semester)
     // 获取在指定学年学期期间在校的学生
     val builder1 = OqlBuilder.from(classOf[Student], "student")
@@ -77,7 +78,9 @@ class BillAction extends RestfulAction[Bill] with ProjectSupport {
     builder1.where(hql.toString, semester.endOn, semester.beginOn)
     builder1.where("not exists(from " + classOf[Bill].getName +
       " b where b.std=student and b.semester=:semester and b.feeType=:tuitionFeeType)", semester, configHelper.feeType)
+    builder1.limit(getPageLimit)
     var students = entityDao.search(builder1)
+    val totalItems = students.asInstanceOf[Page[_]].totalItems
 
     // 获得上面所获学生所有历史应缴记录
     val builder2 = OqlBuilder.from(classOf[Bill].getName + " bill")
@@ -131,15 +134,16 @@ class BillAction extends RestfulAction[Bill] with ProjectSupport {
         case "" =>
       }
     }
-    put("students", students.sortBy(_.code))
+    val limit = getPageLimit
+    put("students", new SinglePage(limit.pageIndex, limit.pageSize, totalItems, students.sortBy(_.code)))
     put("currentStateMap", currentStateMap)
     put("stateTuitionConfigMap", stateTuitionConfigMap)
     forward()
   }
 
   def billInit(): View = {
-    val students = entityDao.find(classOf[Student], longIds("student"))
-    val semester = getFirstSemesterInCurrentYear(intId("bill.semester"))
+    val students = entityDao.find(classOf[Student], getLongIds("student"))
+    val semester = getFirstSemesterInCurrentYear(getIntId("bill.semester"))
     val configHelper = getConfigHelper(semester)
     val toSaveBills = Collections.newBuffer[Bill]
     students.foreach { student =>
@@ -233,7 +237,7 @@ class BillAction extends RestfulAction[Bill] with ProjectSupport {
   }
 
   override protected def saveAndRedirect(bill: Bill): View = {
-    bill.std.id = longId("bill.std")
+    bill.std.id = getLongId("bill.std")
     bill.updatedBy = Securities.user
     super.saveAndRedirect(bill)
   }

@@ -26,14 +26,13 @@ import scala.collection.mutable.ArrayBuffer
 
 class TuitionConfigHelper(configs: collection.Seq[TuitionConfig]) {
 
+  private val wildcards = Collections.newMap[String, mutable.Buffer[TuitionConfig]]
   val feeType = configs.headOption.map(_.feeType).orNull
-
   configs.foreach { cfg =>
     val key = cfg.level.id.toString + "_" + (cfg.duration * 10).toInt + "_" + cfg.major.map(_.id.toString).getOrElse("*") + "_" +
       cfg.direction.map(_.id.toString).getOrElse("*") + "_" + cfg.department.map(_.id.toString).getOrElse("*")
     wildcards.getOrElseUpdate(key, new ArrayBuffer[TuitionConfig]) += cfg
   }
-  private val wildcards = Collections.newMap[String, mutable.Buffer[TuitionConfig]]
 
   def find(ss: StudentState): Option[TuitionConfig] = {
     val directionId = ss.direction.map(_.id.toString).getOrElse("*")
@@ -47,7 +46,7 @@ class TuitionConfigHelper(configs: collection.Seq[TuitionConfig]) {
     patterns.find(wildcards.contains(_)) match {
       case Some(k) =>
         wildcards(k).find { m =>
-          ss.grade.code.compareTo(m.fromGrade.code) >= 0 && ss.grade.code.compareTo(m.toGrade.code) <= 0
+          ss.grade.code.compareTo(m.fromGrade.code) >= 0 && ss.grade.code.compareTo(m.toGrade.map(_.code).getOrElse("9999-99")) <= 0
         }
       case None => None
     }

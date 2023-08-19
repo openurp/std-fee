@@ -11,14 +11,7 @@
         [/@]
       </div>
       <div class="search-list">
-      [@b.div id="billInitStudents"/]
+      [@b.div id="billInitStudents" href="!toInitStudentList?bill.semester.id="+Parameters["bill.semester.id"]/]
       </div>
     </div>
-  <script>
-    $(function() {
-      $(document).ready(function() {
-        bg.form.submit(document.billInitSearchForm, "${b.url("!toInitStudentList")}", "billInitStudents");
-      });
-    });
-  </script>
 [@b.foot/]

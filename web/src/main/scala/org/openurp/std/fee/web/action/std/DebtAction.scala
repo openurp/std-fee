@@ -17,13 +17,28 @@
 
 package org.openurp.std.fee.web.action.std
 
-import org.beangle.cdi.bind.BindModule
-import org.openurp.std.fee.pay.impl.SufePayServiceImpl
+import org.beangle.data.dao.EntityDao
+import org.beangle.web.action.support.ActionSupport
+import org.beangle.web.action.view.View
+import org.beangle.webmvc.support.action.EntityAction
+import org.openurp.base.std.model.Student
+import org.openurp.starter.web.support.ProjectSupport
+import org.openurp.std.fee.model.Debt
 
-class DefaultModule extends BindModule {
-  override protected def binding(): Unit = {
-    bind(classOf[BillAction])
-    bind(classOf[SufePayServiceImpl])
-    bind(classOf[DebtAction])
+class DebtAction extends ActionSupport, EntityAction[Debt], ProjectSupport {
+  var entityDao: EntityDao = _
+
+  def index(): View = {
+    val std = getUser(classOf[Student])
+    put("debts", entityDao.findBy(classOf[Debt], "std", std))
+    put("std", std)
+    forward()
+  }
+
+  def portalet():View={
+    val std = getUser(classOf[Student])
+    put("debts", entityDao.findBy(classOf[Debt], "std", std))
+    put("std", std)
+    forward()
   }
 }

@@ -4,7 +4,7 @@
     <thead class="gridhead">
       <tr>
         <th width="5%">序号</th>
-        <th>教学站</th>
+        <th>部门</th>
         <th>已缴费人数</th>
         <th>已缴费金额</th>
         <th>应缴费人数</th>

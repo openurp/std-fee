@@ -48,8 +48,8 @@ class BillStatAction extends RestfulAction[Bill] with ProjectSupport {
 
     val departmentMap = getDeparts.map(t => (t.id, t)).toMap
     val builder = OqlBuilder.from(classOf[Bill].getName + " bill")
-    builder.where("bill.semester.id =:semesterId", intId("semester"))
-    builder.where("bill.feeType.id =:typeId", intId("feeType"))
+    builder.where("bill.semester.id =:semesterId", getIntId("semester"))
+    builder.where("bill.feeType.id =:typeId", getIntId("feeType"))
     builder.groupBy("bill.std.state.department.id")
     builder.select("bill.std.state.department.id,sum(case when bill.payed is not null and bill.payed > 0 then 1 else 0 end)," +
       "sum(case when bill.payed is not null or bill.payed > 0 then bill.payed else 0 end)/100.0,count(*)")
@@ -60,8 +60,8 @@ class BillStatAction extends RestfulAction[Bill] with ProjectSupport {
         data(2).asInstanceOf[Number], data(3).asInstanceOf[Long]))
     })
     put("results", results)
-    put("feeTypeId", intId("feeType"))
-    put("semesterId", intId("semester"))
+    put("feeTypeId", getIntId("feeType"))
+    put("semesterId", getIntId("semester"))
     forward()
   }
 
@@ -71,11 +71,11 @@ class BillStatAction extends RestfulAction[Bill] with ProjectSupport {
     val builder = OqlBuilder.from(classOf[Bill], "bill")
     builder.where("bill.std.project in (:project)", project)
     builder.where("bill.std.state.department in (:departs)", getDeparts)
-    builder.where("bill.feeType.id =:typeId", intId("feeType"))
+    builder.where("bill.feeType.id =:typeId", getIntId("feeType"))
     val spans = getProject.levels
     if (!spans.isEmpty) builder.where("bill.std.level in (:spans)", spans)
-    builder.where("bill.std.state.department.id = (:departmentId)", intId("department"))
-    builder.where("bill.semester.id =:semesterId", intId("semester"))
+    builder.where("bill.std.state.department.id = (:departmentId)", getIntId("department"))
+    builder.where("bill.semester.id =:semesterId", getIntId("semester"))
     builder.where("bill.payed is null or bill.payed = 0")
     var orderBy = get("orderBy").orNull
     get("orderBy") match {
@@ -84,7 +84,7 @@ class BillStatAction extends RestfulAction[Bill] with ProjectSupport {
     }
     builder.orderBy(Order.parse(orderBy))
     put("bills", entityDao.search(builder))
-    put("semester", entityDao.get(classOf[Semester], intId("semester")))
+    put("semester", entityDao.get(classOf[Semester], getIntId("semester")))
     forward()
   }
 

@@ -1,0 +1,6 @@
+[#ftl/]
+[@b.textfield name="debt.std.code" label="学号"/]
+[@b.textfield name="debt.std.name" label="姓名"/]
+[@b.textfield name="debt.std.state.grade.code" label="年级"/]
+[@b.select name="debt.std.state.department.id" label="院系" items=departs empty="..."/]
+[@b.select label="是否在校" items={"1":"在校","0":"不在校"} empty="..."  name="debt.std.state.inschool"/]

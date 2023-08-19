@@ -13,7 +13,7 @@
 <div class="search-container">
     <div class="search-panel">
         [@b.form title="ui.searchForm" name="billSearchForm" action="!search" target="bills" theme="search"]
-          [@base.semester name="bill.semester.id" label="学年学期"  value=currentSemester required="false"/]
+          [@base.semester name="bill.semester.id" label="学年学期" value=currentSemester required="false"/]
               <input type="hidden" name="orderBy" value="bill.payAt desc"/>
           [@b.textfields names="bill.std.code;学号,bill.std.name;姓名"/]
           [@b.select label="学历层次" items=levels?sort_by("code") empty="..."  name="bill.std.level.id"/]

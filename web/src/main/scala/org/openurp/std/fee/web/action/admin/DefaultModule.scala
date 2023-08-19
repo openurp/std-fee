@@ -18,8 +18,8 @@
 package org.openurp.std.fee.web.action.admin
 
 import org.beangle.cdi.bind.BindModule
-import org.openurp.std.fee.web.action.helper.StudentUtils
 import org.openurp.std.fee.pay.impl.SufePayServiceImpl
+import org.openurp.std.fee.web.action.helper.StudentUtils
 
 class DefaultModule extends BindModule {
   override protected def binding(): Unit = {
@@ -34,6 +34,7 @@ class DefaultModule extends BindModule {
     bind(classOf[TuitionConfigAction])
     bind(classOf[SufePayServiceImpl])
 
-    bind( classOf[StudentUtils] )
+    bind(classOf[DebtAction])
+    bind(classOf[StudentUtils])
   }
 }

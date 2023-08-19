@@ -19,18 +19,19 @@ package org.openurp.std.fee.web.action.std
 
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.web.action.annotation.{mapping, param}
+import org.beangle.web.action.support.ActionSupport
 import org.beangle.web.action.view.{Status, View}
 import org.beangle.webmvc.support.action.EntityAction
 import org.openurp.base.model.User
 import org.openurp.base.std.model.Student
 import org.openurp.starter.web.support.ProjectSupport
 import org.openurp.std.fee.app.model.OnlinePaySetting
-import org.openurp.std.fee.model.{Bill, Order}
+import org.openurp.std.fee.model.{Bill, Debt, Order}
 import org.openurp.std.fee.pay.PayService
 
 import java.time.LocalDate
 
-class BillAction extends EntityAction[Bill] with ProjectSupport {
+class BillAction extends ActionSupport, EntityAction[Bill], ProjectSupport {
 
   var payService: PayService = _
 
@@ -38,10 +39,8 @@ class BillAction extends EntityAction[Bill] with ProjectSupport {
 
   def index(): View = {
     val std = getUser(classOf[Student])
-    val query = OqlBuilder.from(classOf[Bill], "bill")
-    query.where("bill.std=:std", std)
-    val bills = entityDao.search(query)
-    put("bills", bills)
+    put("debts", entityDao.findBy(classOf[Debt],"std",std))
+    put("bills", entityDao.findBy(classOf[Bill],"std",std))
     put("std", std)
 
     val orderQuery = OqlBuilder.from(classOf[Order], "o")
@@ -60,13 +59,13 @@ class BillAction extends EntityAction[Bill] with ProjectSupport {
     val std = getUser(classOf[Student])
     put("std", std)
     put("user", findUser(std))
-    put("bill", entityDao.get(classOf[Bill], longId("bill")))
+    put("bill", entityDao.get(classOf[Bill], getLongId("bill")))
     forward()
   }
 
   def saveUserInfo(): View = {
     val std = getUser(classOf[Student])
-    val bill = entityDao.get(classOf[Bill], longId("bill"))
+    val bill = entityDao.get(classOf[Bill], getLongId("bill"))
     val mobile = get("mobile")
 
     if (mobile.nonEmpty) {
