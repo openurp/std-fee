@@ -19,7 +19,7 @@
       [@b.boxcol/]
       [@b.col title="学号" property="std.code" width="13%"/]
       [@b.col title="姓名" property="std.name" width="12%"]
-        ${debt.std.name}
+        <div class="text-ellipsis" title="${debt.std.name}">${debt.std.name}</div>
       [/@]
       [@b.col title="年级" property="std.state.grade" width="8%"/]
       [@b.col title="院系" property="std.state.department.name" width="10%"]
@@ -34,6 +34,9 @@
       [@b.col title="欠费项目" width="10%" property="feeType.name"/]
       [@b.col title="欠费金额" width="9%" property="amount"]
           ${((debt.amount/100.0)?string("0.00#"))!}
+      [/@]
+      [@b.col title="统计时间" width="9%" property="updatedAt"]
+         ${(debt.updatedAt?string('yy-MM-dd HH:mm'))!}
       [/@]
     [/@]
   [/@]
