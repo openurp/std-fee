@@ -105,7 +105,7 @@ class SufePayServiceImpl extends PayService with Logging with Initializing {
           val client = clients(order.bill.feeType.id)
           val result = getInvoice(order.code, client.systemCode, client.systemKey)
           if (result._1 == "SUCCESS") {
-            val bytes = Base64.decode(result._2.substring("data:image/png;base64,".length).toCharArray)
+            val bytes = Base64.decode(result._2.substring("data:image/png;base64,".length))
             val f = File.createTempFile("invoice", ".png")
             val os = Files.writeOpen(f)
             os.write(bytes)

@@ -1,7 +1,7 @@
 [#ftl]
 [@b.head/]
-  <table class="gridtable">
-    <thead class="gridhead">
+  <table class="grid-table">
+    <thead class="grid-head">
       <tr>
         <th width="5%">序号</th>
         <th>部门</th>
@@ -24,7 +24,7 @@
         <td>${(result.payedRate*100.0)?string("0.##")}%</td>
       </tr>
       [/#list]
-      <tr class="gridhead">
+      <tr class="grid-head">
         <th></td>
         <th>合计</td>
         <th>${sumPayedCount}</th>
