@@ -37,7 +37,7 @@ class BillImportListener(project: Project, entityDao: EntityDao) extends ImportL
     for (stdCode <- data.get("bill.std"); feeTypeName <- data.get("bill.feeType.name");
          semesterCode <- data.get("bill.semester.code")) {
       val stdQuery = OqlBuilder.from(classOf[Student], "s")
-      stdQuery.where("s.user.code=:code and s.project=:project", stdCode.toString, project)
+      stdQuery.where("s.code=:code and s.project=:project", stdCode.toString, project)
       val stds = entityDao.search(stdQuery)
       if (stds.size != 1) {
         tr.addFailure("不存在的学号", stdCode)

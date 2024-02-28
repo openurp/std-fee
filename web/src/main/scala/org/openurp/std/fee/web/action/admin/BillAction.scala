@@ -28,7 +28,7 @@ import org.beangle.web.action.annotation.response
 import org.beangle.web.action.view.{Stream, View}
 import org.beangle.webmvc.support.action.{ExportSupport, ImportSupport, RestfulAction}
 import org.openurp.base.model.{Project, Semester}
-import org.openurp.base.std.code.FeeType
+import org.openurp.code.std.model.FeeType
 import org.openurp.base.std.model.{Student, StudentState}
 import org.openurp.code.edu.model.EducationLevel
 import org.openurp.starter.web.support.ProjectSupport

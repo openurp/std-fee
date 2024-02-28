@@ -22,7 +22,7 @@ import org.beangle.data.dao.OqlBuilder
 import org.beangle.web.action.view.View
 import org.beangle.webmvc.support.action.RestfulAction
 import org.openurp.base.model.{Project, Semester}
-import org.openurp.base.std.code.FeeType
+import org.openurp.code.std.model.FeeType
 import org.openurp.starter.web.support.ProjectSupport
 import org.openurp.std.fee.model.Bill
 import org.openurp.std.fee.web.data.BillStat

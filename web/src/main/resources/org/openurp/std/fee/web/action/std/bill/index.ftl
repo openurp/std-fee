@@ -16,7 +16,7 @@
           [@b.col title="收费类型" property="feeType.name"/]
           [@b.col title="应缴费用" property="amount"]${(bill.amount*1.0/100)?string("0.##")}[/@]
           [@b.col title="实缴费用" property="payed"]${(bill.payed*1.0/100)?string("0.##")}[/@]
-          [@b.col title="缴费时间" property="payAt"]${((bill.payAt)?string("yyyy-MM-dd HH:mm"))!}[/@]
+          [@b.col title="缴费时间" property="payAt"]${((bill.payAt)?string("yyyy-MM-dd HH:mm"))!'--'}[/@]
           [@b.col title="操作"]
             [#if bill.payed ==0 && suitable(bill)][@b.a href="!displayUserInfo?billId="+bill.id]付费[/@][/#if]
             [#if orders.get(bill.id)?? && orders.get(bill.id).paid]

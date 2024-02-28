@@ -23,7 +23,7 @@ import org.beangle.commons.collection.Collections
 import org.beangle.data.model.IntId
 import org.beangle.data.model.pojo.DateRange
 import org.openurp.base.model.Semester
-import org.openurp.base.std.code.FeeType
+import org.openurp.code.std.model.FeeType
 
 import scala.collection.mutable
 

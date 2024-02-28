@@ -21,7 +21,7 @@ import org.beangle.web.action.annotation.mapping
 import org.beangle.web.action.view.View
 import org.beangle.webmvc.support.action.RestfulAction
 import org.openurp.base.model.Project
-import org.openurp.base.std.code.FeeType
+import org.openurp.code.std.model.FeeType
 import org.openurp.code.edu.model.EducationLevel
 import org.openurp.starter.web.support.ProjectSupport
 import org.openurp.std.fee.model.Order

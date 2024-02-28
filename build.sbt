@@ -2,7 +2,7 @@ import org.openurp.parent.Settings._
 import org.openurp.parent.Dependencies._
 
 ThisBuild / organization := "org.openurp.std.fee"
-ThisBuild / version := "0.0.24-SNAPSHOT"
+ThisBuild / version := "0.0.24"
 
 ThisBuild / scmInfo := Some(
   ScmInfo(
@@ -23,9 +23,9 @@ ThisBuild / developers := List(
 ThisBuild / description := "OpenURP Std Fee"
 ThisBuild / homepage := Some(url("http://openurp.github.io/std-fee/index.html"))
 
-val apiVer = "0.34.4"
-val starterVer = "0.3.14"
-val baseVer = "0.4.12"
+val apiVer = "0.37.1"
+val starterVer = "0.3.23"
+val baseVer = "0.4.20"
 val openurp_base_api = "org.openurp.base" % "openurp-base-api" % apiVer
 val openurp_std_api = "org.openurp.std" % "openurp-std-api" % apiVer
 val openurp_stater_web = "org.openurp.starter" % "openurp-starter-web" % starterVer

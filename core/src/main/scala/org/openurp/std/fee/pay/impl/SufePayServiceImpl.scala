@@ -113,7 +113,7 @@ class SufePayServiceImpl extends PayService with Logging with Initializing {
             val repo = EmsApp.getBlobRepository(true)
             val std = order.bill.std
             try {
-              val meta = repo.upload("/invoice/" + order.payAt.get.atZone(ZoneId.systemDefault()).getYear,
+              val meta = repo.upload("/fee/invoice/" + order.payAt.get.atZone(ZoneId.systemDefault()).getYear,
                 new FileInputStream(f), order.code + ".png", std.code + " " + std.name)
               order.invoicePath = Some(meta.filePath)
               entityDao.saveOrUpdate(order)
