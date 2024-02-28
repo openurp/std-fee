@@ -39,8 +39,8 @@ class BillAction extends ActionSupport, EntityAction[Bill], ProjectSupport {
 
   def index(): View = {
     val std = getUser(classOf[Student])
-    put("debts", entityDao.findBy(classOf[Debt],"std",std))
-    put("bills", entityDao.findBy(classOf[Bill],"std",std))
+    put("debts", entityDao.findBy(classOf[Debt], "std", std))
+    put("bills", entityDao.findBy(classOf[Bill], "std", std))
     put("std", std)
 
     val orderQuery = OqlBuilder.from(classOf[Order], "o")

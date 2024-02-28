@@ -40,7 +40,7 @@ import java.time.format.DateTimeFormatter
 import java.time.{Duration, Instant, LocalDateTime, ZoneId}
 import java.util as ju
 
-object SufePayServiceImpl {
+object SufePayServiceImpl extends Logging {
   def getInvoice(orderNo: String, systemCode: String, systemKey: String): Tuple2[String, String] = {
     val seed = s"order_no=${orderNo}&systemCode=${systemCode}&systemKey=${systemKey}"
     val md5Key = Digests.md5Hex(seed).toUpperCase()
@@ -62,16 +62,24 @@ object SufePayServiceImpl {
     httpCon.connect()
     val lines = IOs.readString(httpCon.getInputStream)
     if (lines.contains("FAIL")) {
-      val error = Strings.substringBetween(lines, "<return_msg><![CDATA[", "]]>")
+      var error = Strings.substringBetween(lines, "<return_msg><![CDATA[", "]]>")
+      if (Strings.isBlank(error)){
+        logger.info(lines)
+        error = lines
+      }
       ("FAIL", error)
     } else if (lines.contains("error")) {
-      val error = Strings.substringBetween(lines, "error:\"", "\"")
+      var error = Strings.substringBetween(lines, "error:\"", "\"")
+      if (Strings.isBlank(error)){
+        logger.info(lines)
+        error = lines
+      }
       ("ERROR", error)
     } else {
       val imgbase64 = Strings.substringBetween(lines, "[<img src='", "'/>]]></img>")
-      if(Strings.isBlank(imgbase64)){
+      if (Strings.isBlank(imgbase64)) {
         ("ERROR", Strings.substringBetween(lines, "<img><![CDATA[", "]]></img>"))
-      }else{
+      } else {
         ("SUCCESS", imgbase64)
       }
     }
@@ -96,10 +104,10 @@ class SufePayServiceImpl extends PayService with Logging with Initializing {
     }.toMap
   }
 
-  override def getInvoiceUrl(order: Order): (Option[String],String) = {
+  override def getInvoiceUrl(order: Order): (Option[String], String) = {
     val repo = EmsApp.getBlobRepository(true)
     order.invoicePath match {
-      case Some(p) => (repo.path(p),"SUCCESS")
+      case Some(p) => (repo.path(p), "SUCCESS")
       case None =>
         if (order.paid && order.payAt.isDefined) {
           val client = clients(order.bill.feeType.id)
@@ -118,17 +126,17 @@ class SufePayServiceImpl extends PayService with Logging with Initializing {
               order.invoicePath = Some(meta.filePath)
               entityDao.saveOrUpdate(order)
               f.delete()
-              (repo.path(meta.filePath),"SUCCESS")
+              (repo.path(meta.filePath), "SUCCESS")
             } catch {
               case e: Throwable =>
                 e.printStackTrace()
-                (None,e.getMessage)
+                (None, e.getMessage)
             }
           } else {
-            (None,result._2)
+            (None, result._2)
           }
         } else {
-          (None,"订单未支付")
+          (None, "订单未支付")
         }
     }
   }
@@ -192,7 +200,7 @@ class SufePayServiceImpl extends PayService with Logging with Initializing {
 
   protected[impl] def createOrder(bill: Bill, params: Map[String, String]): Order = {
     val std = bill.std
-    val user = entityDao.findBy(classOf[User],"school"-> std.project.school,"code"->  std.code).head
+    val user = entityDao.findBy(classOf[User], "school" -> std.project.school, "code" -> std.code).head
     val inputs = Map("inputIdNo" -> std.person.code, "inputStuNo" -> std.code, "inputStuName" -> std.name, "inputPhone" -> user.mobile.getOrElse("--"))
     val order = createOrder(clients(bill.feeType.id), bill.amount, inputs)
     order.bill = bill
