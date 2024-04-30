@@ -18,14 +18,14 @@
 package org.openurp.std.fee.web.action.admin
 
 import org.beangle.data.dao.OqlBuilder
-import org.beangle.webmvc.support.action.RestfulAction
+import org.beangle.webmvc.support.action.{ExportSupport, RestfulAction}
 import org.openurp.base.model.Project
-import org.openurp.code.std.model.FeeType
 import org.openurp.code.edu.model.EducationLevel
+import org.openurp.code.std.model.FeeType
 import org.openurp.starter.web.support.ProjectSupport
 import org.openurp.std.fee.model.Bill
 
-class BillSearchAction extends RestfulAction[Bill] with ProjectSupport {
+class BillSearchAction extends RestfulAction[Bill], ProjectSupport, ExportSupport[Bill] {
 
   override def indexSetting(): Unit = {
     given project: Project = getProject

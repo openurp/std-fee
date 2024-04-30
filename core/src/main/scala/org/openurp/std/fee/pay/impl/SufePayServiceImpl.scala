@@ -63,14 +63,14 @@ object SufePayServiceImpl extends Logging {
     val lines = IOs.readString(httpCon.getInputStream)
     if (lines.contains("FAIL")) {
       var error = Strings.substringBetween(lines, "<return_msg><![CDATA[", "]]>")
-      if (Strings.isBlank(error)){
+      if (Strings.isBlank(error)) {
         logger.info(lines)
         error = lines
       }
       ("FAIL", error)
     } else if (lines.contains("error")) {
       var error = Strings.substringBetween(lines, "error:\"", "\"")
-      if (Strings.isBlank(error)){
+      if (Strings.isBlank(error)) {
         logger.info(lines)
         error = lines
       }
@@ -106,6 +106,12 @@ class SufePayServiceImpl extends PayService with Logging with Initializing {
 
   override def getInvoiceUrl(order: Order): (Option[String], String) = {
     val repo = EmsApp.getBlobRepository(true)
+    order.invoicePath foreach { p =>
+      repo.path(p) match
+        case None => order.invoicePath = None
+        case Some(url) => if !HttpUtils.isAlive(url) then order.invoicePath = None
+      entityDao.saveOrUpdate(order)
+    }
     order.invoicePath match {
       case Some(p) => (repo.path(p), "SUCCESS")
       case None =>

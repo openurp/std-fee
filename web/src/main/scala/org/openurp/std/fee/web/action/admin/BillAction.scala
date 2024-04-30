@@ -20,9 +20,9 @@ package org.openurp.std.fee.web.action.admin
 import org.beangle.commons.collection.Collections
 import org.beangle.commons.collection.page.{Page, SinglePage}
 import org.beangle.data.dao.OqlBuilder
-import org.beangle.data.excel.schema.ExcelSchema
-import org.beangle.data.transfer.importer.ImportSetting
-import org.beangle.data.transfer.importer.listener.ForeignerListener
+import org.beangle.doc.excel.schema.ExcelSchema
+import org.beangle.doc.transfer.importer.ImportSetting
+import org.beangle.doc.transfer.importer.listener.ForeignerListener
 import org.beangle.security.Securities
 import org.beangle.web.action.annotation.response
 import org.beangle.web.action.view.{Stream, View}
