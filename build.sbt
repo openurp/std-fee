@@ -1,7 +1,7 @@
 import org.openurp.parent.Settings.*
 
 ThisBuild / organization := "org.openurp.std.fee"
-ThisBuild / version := "0.0.26"
+ThisBuild / version := "0.0.27-SNAPSHOT"
 
 ThisBuild / scmInfo := Some(
   ScmInfo(
