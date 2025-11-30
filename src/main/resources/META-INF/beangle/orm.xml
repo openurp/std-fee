@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<orm>
-  <mapping class="org.openurp.std.fee.app.model.DefaultMapping" />
-  <naming>
-    <profile package = "org.openurp.std.fee.app.model" pluralize="true" schema="app"/>
-  </naming>
-</orm>

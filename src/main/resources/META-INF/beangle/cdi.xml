@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<cdi>
-  <container>
-    <module class="org.openurp.std.fee.web.action.admin.DefaultModule"/>
-    <module class="org.openurp.std.fee.web.action.std.DefaultModule"/>
-    <module class="org.openurp.starter.web.ProjectModule"/>
-  </container>
-</cdi>

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<beangle xmlns="http://beangle.github.io/schema/framework"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://beangle.github.io/schema/framework http://beangle.github.io/schema/framework-1.0.xsd">
+  <ems app-name="std-fee-webapp"/>
+
+  <cdi>
+    <module class="org.openurp.std.fee.web.action.admin.DefaultModule"/>
+    <module class="org.openurp.std.fee.web.action.std.DefaultModule"/>
+    <module class="org.openurp.starter.web.ProjectModule"/>
+  </cdi>
+
+  <orm>
+    <mapping class="org.openurp.std.fee.app.model.DefaultMapping"/>
+    <naming>
+      <profile package="org.openurp.std.fee.app.model" pluralize="true" schema="app"/>
+    </naming>
+  </orm>
+
+  <mvc>
+    <static>
+      <bundle name="qrcodejs" version="1c78ccd"/>
+    </static>
+    <profile package="org.openurp.std.fee.web.action">
+      <url path="/" suffix="" style="seo"/>
+      <interceptor name="web.Interceptor.hibernate"/>
+      <interceptor name="web.Interceptor.security"/>
+    </profile>
+
+  </mvc>
+
+</beangle>

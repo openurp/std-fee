@@ -20,7 +20,7 @@ package org.openurp.std.fee.web.action.admin
 import org.beangle.data.dao.OqlBuilder
 import org.beangle.webmvc.support.action.RestfulAction
 import org.beangle.webmvc.view.View
-import org.openurp.base.edu.model.{Direction, Major}
+import org.openurp.base.edu.model.{MajorDirection, Major}
 import org.openurp.base.model.Project
 import org.openurp.base.std.model.Grade
 import org.openurp.code.edu.model.EducationLevel
@@ -46,7 +46,7 @@ class TuitionConfigAction extends RestfulAction[TuitionConfig] with ProjectSuppo
     put("levels", getCodes(classOf[EducationLevel]))
     put("departments", getDeparts)
     put("majors", findInProject(classOf[Major]))
-    put("directions", findInProject(classOf[Direction]))
+    put("directions", findInProject(classOf[MajorDirection]))
     put("grades", entityDao.findBy(classOf[Grade], "project", project))
     super.editSetting(entity)
   }
